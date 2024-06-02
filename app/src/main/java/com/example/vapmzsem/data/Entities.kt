@@ -13,11 +13,11 @@ data class Fueling (
     val id_F: Int = 0,
     val quantity : Float,
     val total_price : Float,
-    val full_tank : Boolean,
-    val fuel_type : String?,
-    val fueling_Station : String?,
-    val time : Date?,
-    val odometter: Int?
+    val full_tank : Boolean = false,
+    val fuel_type : String? = null,
+    val fueling_Station : String? = null,
+    val time : Date? = Date(),
+    val odometter: Int? = null
 )
 
 @Entity(tableName = "routes", foreignKeys = [ForeignKey(entity = Fueling::class, parentColumns = ["id_F"], childColumns = ["id_F"])])
