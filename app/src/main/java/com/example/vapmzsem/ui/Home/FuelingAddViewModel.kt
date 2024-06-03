@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.vapmzsem.data.AppRepository
+import java.util.Calendar
 import java.util.Date
 
 class FuelingAddViewModel(
@@ -35,6 +36,6 @@ data class FuelingDetail(
     val full_tank : Boolean = false,
     val fuel_type : String = "",
     val fueling_Station : String = "",
-    val time : Date? = Date(),
+    val time : Calendar? = Calendar.getInstance(),
     val odometter: String = "0"
 )

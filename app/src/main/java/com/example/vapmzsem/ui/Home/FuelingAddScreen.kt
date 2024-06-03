@@ -56,6 +56,7 @@ import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import com.example.vapmzsem.ui.theme.AppTheme
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
@@ -143,7 +144,7 @@ fun FuelingAddForm(
             leadingIcon = {Text("km")},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next)
         )
-        DateTimeRow(details = details)
+        DateTimeRow(details = details, onValueChange = onValueChange)
 
     }
 
@@ -153,11 +154,12 @@ fun FuelingAddForm(
 @Composable
 fun DateTimeRow(
     details: FuelingDetail,
+    onValueChange: (FuelingDetail) -> Unit,
     modifier: Modifier = Modifier
 ){
     var datePickerVisible by remember { mutableStateOf(false) }
     var timePickerVisible by remember { mutableStateOf(false) }
-
+    val calendar = remember { Calendar.getInstance() }
 
     Row (modifier = modifier){
         Column (modifier = Modifier
@@ -165,18 +167,10 @@ fun DateTimeRow(
                 onClick = { datePickerVisible = true })
             .padding(5.dp)
         ) {
-//            OutlinedTextField(
-//                value = details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: "" },
-//                onValueChange = {},
-//                label = { Text("Dátum") },
-//                readOnly = true,
-//                enabled = false,
-//            )
             OutlinedCard (
-
             ){
                 Text(text = "Dátum", fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-                Text(text = details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: "" },
+                Text(text =  SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(details.time?.time ?: Date()), //details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: ""
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
         }
@@ -188,14 +182,14 @@ fun DateTimeRow(
             OutlinedCard (
             ){
                 Text(text = "Čas", fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-                Text(text = details.time.let { SimpleDateFormat("HH:mm").format(it) ?: "" },
+                Text(text = details.time.let { SimpleDateFormat("HH:mm", Locale.getDefault()).format(it?.time ?: Date()) },
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
         }
     }
 
     if(datePickerVisible){
-        val dateState  = rememberDatePickerState( initialSelectedDateMillis = details.time?.time ?: null )
+        val dateState  = rememberDatePickerState( initialSelectedDateMillis = details.time?.timeInMillis )
         Column {
             DatePickerDialog(
                 dismissButton = {
@@ -205,8 +199,8 @@ fun DateTimeRow(
                 },
                 confirmButton = {
                     Button(onClick = {
-                        val date = dateState.selectedDateMillis?.let{Date(it)}
-                        details.copy( time = date)
+                        calendar.timeInMillis = dateState.selectedDateMillis ?: 0
+                        onValueChange(details.copy( time = calendar))
                         datePickerVisible = false
                     }) {
                         Text(text = "OK")
@@ -220,7 +214,7 @@ fun DateTimeRow(
     }
     if(timePickerVisible){
         val timeState = rememberTimePickerState( initialHour =  details.time?.hours ?: 12 )
-        //TimePickerDialog()
+        TimePickerDialog()
     }
 }
 
