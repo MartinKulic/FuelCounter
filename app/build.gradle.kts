@@ -54,6 +54,8 @@ android {
 
 dependencies {
     val room_version = "2.6.1"
+    val lifecycle_version = "2.8.1"
+    //val lifecycle_version = "2.6.2"
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -70,6 +72,15 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
+    // Lifecycle utilities for Compose
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    // ViewModel utilities for Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation("androidx.navigation:navigation-compose:2.7.5")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

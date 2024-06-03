@@ -17,58 +17,64 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.vapmzsem.data.Fueling
+import com.example.vapmzsem.ui.AppViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vapmzsem.R
+import com.example.vapmzsem.ui.navigation.NavigationDestination
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.Date
+
+object FuelingScreenDestination : NavigationDestination{
+    override val route = "fueling"
+    override val titleRes: Int = R.string.fueling_screen_title
+}
 
 @Composable
 fun FuelingScreen(
     onNewFuelingClick : () -> Unit = {},
     onItemClicked : (Fueling) -> Unit = {},
-    itemList: List<Fueling>,
+    viewModel: FuelinViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ){
+    val uiState by viewModel.fuelingScreenUiState.collectAsState()
     Column (horizontalAlignment = Alignment.CenterHorizontally) {
         Row(Modifier.fillMaxWidth()) {
-            Button(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth()) {
+            Button(onClick = onNewFuelingClick, modifier = modifier.fillMaxWidth()) {
                 Text(text = "Nové Tankovanie")
             }
         }
         Column (modifier = modifier.padding(start = 20.dp, end = 20.dp)){
-            if (itemList.isEmpty()) {
-                Spacer(modifier = Modifier.height(50.dp))
-                Text(text = "Zatial žiadne tankovania :(", style = MaterialTheme.typography.titleLarge)
-            }
-            else{
-                FuelingList(
-                    itemList = itemList,
-                    onItemClicked = onItemClicked
-                );
+            FuelingList(
+                itemList = uiState.itemList,
+                onItemClicked = onItemClicked
+            )
             }
 
-        }}
+        }
 }
 
 @Composable
 fun FuelingList(
     itemList: List<Fueling>,
-    onItemClicked : (Fueling) -> Unit,
+    onItemClicked : (Fueling) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
+    if (itemList.isEmpty()) {
+        Spacer(modifier = Modifier.height(50.dp))
+        Text(text = "Zatial žiadne tankovania :(", style = MaterialTheme.typography.titleLarge)
+    }
+    else{
+        LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
-//        for (fueling in itemList){
-//            item (key = fueling.id_F) {
-//                FuelingItem(item = fueling, modifier = modifier.padding(8.dp).clickable { onItemClicked(fueling) })
-//            }
-//        }
-
         items(
             items = itemList,
             key = { fueling -> fueling.id_F }
@@ -78,17 +84,9 @@ fun FuelingList(
                 modifier = modifier
                     .padding(8.dp)
                     .clickable { onItemClicked(fueling) }
-            )
+                )
+            }
         }
-//        items(items = itemList, key = {it.id_F}) {
-//            item -> FuelingItem(
-//                item = item,
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .clickable { onItemClicked(item) }
-//            )
-//        }
-
     }
 }
 
@@ -118,7 +116,7 @@ fun FuelingScreenPreviewEmplty(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        FuelingScreen(
+        FuelingList(
             itemList = listOf()
         )
     }
@@ -131,7 +129,7 @@ fun FuelingScreenPreviewSomeItems(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        FuelingScreen(
+        FuelingList(
             itemList = listOf(
                 Fueling(id_F = 0, quantity = 50.5f, total_price = 60.99f, full_tank = true, fuel_type = null, fueling_Station = null, time = Date(), odometter = null ),
                 Fueling(id_F = 1, quantity = 42.87f, total_price = 50.12f),
