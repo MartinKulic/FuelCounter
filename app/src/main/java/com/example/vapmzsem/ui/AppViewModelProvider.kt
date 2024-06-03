@@ -1,13 +1,13 @@
 package com.example.vapmzsem.ui
 
-import androidx.lifecycle.ViewModelProvider
+import android.app.Application
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vapmzsem.MyApplication
 import com.example.vapmzsem.ui.Home.FuelinViewModel
+import com.example.vapmzsem.ui.Home.FuelingAddViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -16,6 +16,10 @@ object AppViewModelProvider {
             FuelinViewModel(
                 myApplication().container.appRepository
             )
+        }
+        // Initializer for FuelingAdd
+        initializer {
+            FuelingAddViewModel(myApplication().container.appRepository)
         }
     }
 }

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.vapmzsem.data.Fueling
 import com.example.vapmzsem.ui.Home.FuelingScreen
+import com.example.vapmzsem.ui.navigation.MyNavHost
 import com.example.vapmzsem.ui.theme.AppTheme
 import java.util.Date
 
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    FuelingScreen(  )
+                    MyApp()
                 }
             }
         }
