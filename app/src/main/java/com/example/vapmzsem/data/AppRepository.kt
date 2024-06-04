@@ -8,7 +8,7 @@ interface AppRepository {
     suspend fun delete(item: Fueling)
     fun getFueling(id : Int) : Flow<Fueling?>
     fun getAllFuelings() : Flow<List<Fueling>>
-    fun getNewestFueling() : Flow<Fueling>
+    fun getNewestFueling() : Flow<Fueling?>
     suspend fun insert(item : Route)
     suspend fun update(item: Route)
     suspend fun delete(item : Route)

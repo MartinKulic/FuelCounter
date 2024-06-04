@@ -35,7 +35,7 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
         return fuelingDao.getAllFuelings()
     }
 
-    override fun getNewestFueling(): Flow<Fueling> {
+    override fun getNewestFueling(): Flow<Fueling?> {
         return fuelingDao.getNewestFueling()
     }
 

@@ -26,7 +26,7 @@ interface FuelingDao {
     fun getAllFuelings() : Flow<List<Fueling>>
 
     @Query("Select * from fuelings where time in (select max(time) from fuelings)")
-    fun getNewestFueling() : Flow<Fueling>
+    fun getNewestFueling() : Flow<Fueling?>
 }
 
 @Dao

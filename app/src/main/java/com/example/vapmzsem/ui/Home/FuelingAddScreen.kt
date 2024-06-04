@@ -65,6 +65,11 @@ fun FuelingAddScreen(
     viewModel: FuelingAddViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+
+    coroutineScope.launch {
+
+    }
+
     Scaffold (
         topBar = {
             MyTopAppBar(title = stringResource(FuelingAddScreenDestination.titleRes),
@@ -103,7 +108,7 @@ fun FuelingAddBody(
 ){
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween) {
 
-        FuelingAddForm(details = fuelingUiState.details, onValueChange = onValueChange)
+        FuelingAddForm(details = fuelingUiState.details, onValueChange = onValueChange, previousOdometerValue = fuelingUiState.lastOdometer)
 
         Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center ){
             Button(onClick = onConfirmClick, modifier.fillMaxWidth(), enabled = fuelingUiState.isEntryValid) {
@@ -117,7 +122,8 @@ fun FuelingAddBody(
 @Composable
 fun FuelingAddForm(
     details : FuelingAsUi,
-    onValueChange: (FuelingAsUi) -> Unit
+    onValueChange: (FuelingAsUi) -> Unit,
+    previousOdometerValue : String? = null
 ){
     /*TODO Aby nebolo mozne pridat zaporne quantity a cenu*/
     Column {
@@ -138,6 +144,9 @@ fun FuelingAddForm(
         OutlinedTextField(
             value = details.odometter,
             label = {Text("Odometer")},
+            supportingText = {if (previousOdometerValue != null) {
+                Text(text = "Posledná hodnota odometra: $previousOdometerValue km")
+            } },
             onValueChange = {onValueChange(details.copy(odometter = it))},
             leadingIcon = {Text("km")},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)

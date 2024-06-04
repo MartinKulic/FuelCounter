@@ -16,28 +16,30 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class FuelingAddViewModel(
     private val repository: AppRepository
 ) : ViewModel() {
-    val lastFueling : StateFlow<FuelingAsUi> = repository.getNewestFueling()
-        //.filterNotNull()
-        .map { it.toUi() }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = FuelingAsUi()
-        )
-    /*TODO Nezobrazi poslendy odometer*/
-    var fuelingUiState by mutableStateOf(FuelingUiState(details = FuelingAsUi(odometter = lastFueling.value.odometter)))
+    var fuelingUiState by mutableStateOf(FuelingUiState(details = FuelingAsUi()))
         private set
 
-
+    init {
+        viewModelScope.launch {
+            repository.getNewestFueling().collect{
+                newestFuelnig -> newestFuelnig?.let {
+                    updateUiState(fuelingUiState.details.copy(odometter = it.odometter.toString()))
+                    fuelingUiState = fuelingUiState.copy(lastOdometer = it.odometter.toString())
+            }
+            }
+        }
+    }
 
     fun updateUiState (fueligDetail: FuelingAsUi){
         fuelingUiState = FuelingUiState(isEntryValid = validateInput(fueligDetail), details = fueligDetail)
     }
+
     fun validateInput(details : FuelingAsUi = fuelingUiState.details) : Boolean{
         return with(details){
             quantity.isNotBlank() && quantity.toFloatOrNull() != 0f && total_price.isNotBlank() && odometter >= "0"
@@ -53,6 +55,7 @@ class FuelingAddViewModel(
 
 data class FuelingUiState(
     val isEntryValid : Boolean = false,
-    val details: FuelingAsUi = FuelingAsUi()
+    val details: FuelingAsUi = FuelingAsUi(),
+    val lastOdometer : String? = null
 
 )
