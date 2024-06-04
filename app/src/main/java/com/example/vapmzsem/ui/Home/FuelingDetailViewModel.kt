@@ -27,6 +27,10 @@ class FuelingDetailViewModel(
             initialValue = FuelingAsUi()
         )
 
+    suspend fun delete(){
+        repository.delete(uiState.value.toFueling())
+    }
+
     companion object{
         private const val TIMEOUT_MILLIS = 5_000L
     }

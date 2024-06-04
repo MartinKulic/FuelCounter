@@ -42,7 +42,9 @@ fun MyNavHost(
                 type = NavType.IntType
             })
         ){
-            FuelingDetailScreen(onEditClick = {}, navigateBack = {navController.popBackStack()})
+            FuelingDetailScreen(onEditClick = {},
+                navigateBack = {navController.popBackStack()},
+                onNavigateUp = {navController.navigateUp()})
 
         }
 

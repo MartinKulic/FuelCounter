@@ -15,6 +15,7 @@ data class FuelingAsUi(
 ){
     fun toFueling() : Fueling {
         return Fueling(
+            id_F = id,
             quantity = quantity.replace(",",".").toFloatOrNull() ?: 1f,
             total_price = total_price.replace(",",".").toFloatOrNull() ?: 1f,
             full_tank = full_tank,

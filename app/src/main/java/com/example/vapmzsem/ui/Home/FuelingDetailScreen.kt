@@ -8,14 +8,21 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -30,6 +37,8 @@ import com.example.vapmzsem.R
 import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import com.example.vapmzsem.ui.theme.AppTheme
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
@@ -56,6 +65,8 @@ fun FuelingDetailScreen(
     viewModel: FuelingDetailViewModel  = viewModel(factory = AppViewModelProvider.Factory)
 ){
     val uiState = viewModel.uiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold (
         topBar = {
             MyTopAppBar(title = stringResource(FuelingDetailDestination.titleRes),
@@ -63,11 +74,20 @@ fun FuelingDetailScreen(
                 navigateUp = onNavigateUp
             )
         },
-        bottomBar = { FuelingDetailBottomBar()}
+        bottomBar = { FuelingDetailBottomBar(
+            onDeleteClick = {
+                coroutineScope.launch {
+                    viewModel.delete()
+                    navigateBack()
+                }
+            }
+        )}
     ) {
         innerPadding ->
-            FuelingDetailBody(details = uiState.value, modifier= Modifier.fillMaxSize()
-                .padding(top = innerPadding.calculateTopPadding(),
+            FuelingDetailBody(details = uiState.value, modifier= Modifier
+                .fillMaxSize()
+                .padding(
+                    top = innerPadding.calculateTopPadding(),
                     start = (15.dp),
                     end = (15.dp)
                 )
@@ -76,18 +96,34 @@ fun FuelingDetailScreen(
     }
 }
 @Composable
-fun FuelingDetailBottomBar()
+fun FuelingDetailBottomBar(
+    onDeleteClick : () -> Unit
+)
 {
+    var deleteConfirmation by rememberSaveable {
+        mutableStateOf(false)
+    }
     Row(
         Modifier
             .fillMaxWidth()
             .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom){
-        OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(0.5f)) {
+        OutlinedButton(onClick = { deleteConfirmation = true }, modifier = Modifier.fillMaxWidth(0.5f)) {
             Text(text= "Vymazať")
         }
         Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth() ) {
             Text(text = "Upraviť")
         }
+    }
+
+    if(deleteConfirmation){
+        DeleteConfirmationDialog(
+            onConfirm = {
+                deleteConfirmation = false
+                onDeleteClick()
+                        },
+            onReject = {
+                deleteConfirmation = false
+            })
     }
 }
 @Composable
@@ -123,6 +159,28 @@ fun DetailItem(
         Text(text = "${title}: ", fontWeight = FontWeight.Bold)
         Text(text = "$value $unit")
     }
+}
+
+@Composable
+fun DeleteConfirmationDialog(
+    onConfirm : () -> Unit,
+    onReject : () -> Unit
+){
+    AlertDialog(
+        onDismissRequest = {},
+        title = { Text(text = "Naozaj chceš vymazať?") },
+        modifier = Modifier,
+        dismissButton = {
+            TextButton(onClick =  onReject ) {
+                Text(text = "Nie")
+            }
+        },
+        confirmButton = { TextButton(onClick =  onConfirm ) {
+            Text(text = "Áno")
+        }}
+
+    )
+
 }
 
 @Preview
