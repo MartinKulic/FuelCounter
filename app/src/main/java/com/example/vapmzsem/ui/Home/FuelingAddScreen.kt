@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TimePicker
@@ -37,9 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -55,6 +58,8 @@ import com.example.vapmzsem.data.Converters
 import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import com.example.vapmzsem.ui.theme.AppTheme
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Currency
@@ -73,6 +78,7 @@ fun FuelingAddScreen(
     onNavigateUp: ()->Unit = onNavigateBack,
     viewModel: FuelingAddViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Scaffold (
         topBar = {
             MyTopAppBar(title = stringResource(FuelingAddScreenDestination.titleRes),
@@ -85,7 +91,12 @@ fun FuelingAddScreen(
             FuelingAddBody(
                 fuelingUiState = viewModel.fuelingUiState,
                 onValueChange = viewModel::updateUiState,
-                onConfirmClick = { /*TODO*/},
+                onConfirmClick = {
+                                 coroutineScope.launch {
+                                    viewModel.saveFueling()
+                                     onNavigateBack()
+                                 }
+                },
                 modifier = Modifier
                     .padding(
                         start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -109,7 +120,7 @@ fun FuelingAddBody(
         FuelingAddForm(details = fuelingUiState.details, onValueChange = onValueChange)
 
         Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center ){
-            Button(onClick = onConfirmClick, modifier.fillMaxWidth()) {
+            Button(onClick = onConfirmClick, modifier.fillMaxWidth(), enabled = fuelingUiState.isEntryValid) {
                 Text(text = "Potvrď")
             }
         }
@@ -142,9 +153,33 @@ fun FuelingAddForm(
             label = {Text("Odometer")},
             onValueChange = {onValueChange(details.copy(odometter = it))},
             leadingIcon = {Text("km")},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
         )
+
         DateTimeRow(details = details, onValueChange = onValueChange)
+
+        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = "Plná nádrž")
+            Switch (modifier = Modifier.padding(start = 20.dp),
+                checked = details.full_tank,
+                onCheckedChange = { onValueChange(details.copy(full_tank = it)) }
+            )
+        }
+
+        OutlinedTextField(
+            value = details.fuel_type,
+            label = {Text("Druh paliva")},
+            onValueChange = {onValueChange(details.copy(fuel_type = it))},
+            leadingIcon = {Text("km")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
+        )
+        OutlinedTextField(
+            value = details.fueling_Station,
+            label = {Text("Čerpacia stanica")},
+            onValueChange = {onValueChange(details.copy(fueling_Station = it))},
+            leadingIcon = {Text("km")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Go)
+        )
 
     }
 
@@ -199,7 +234,12 @@ fun DateTimeRow(
                 },
                 confirmButton = {
                     Button(onClick = {
+                        val calendarTime : Triple<Int,Int, Int> = Triple<Int, Int, Int> (calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND))
                         calendar.timeInMillis = dateState.selectedDateMillis ?: 0
+                        calendar.set(Calendar.HOUR_OF_DAY, calendarTime.first)
+                        calendar.set(Calendar.MINUTE, calendarTime.second)
+                        calendar.set(Calendar.SECOND, calendarTime.third)
+
                         onValueChange(details.copy( time = calendar))
                         datePickerVisible = false
                     }) {
@@ -213,8 +253,19 @@ fun DateTimeRow(
         }
     }
     if(timePickerVisible){
-        val timeState = rememberTimePickerState( initialHour =  details.time?.hours ?: 12 )
-        TimePickerDialog()
+        TimePickerDialog(
+            LocalContext.current,
+            {
+                _, hours, minutes ->
+                calendar.set(Calendar.HOUR_OF_DAY, hours)
+                calendar.set(Calendar.MINUTE, minutes)
+                onValueChange(details.copy(time = calendar))
+                timePickerVisible = false
+            },
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true
+        ).show()
     }
 }
 
