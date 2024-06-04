@@ -7,14 +7,16 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.vapmzsem.ui.Home.FuelingAddScreen
-import com.example.vapmzsem.ui.Home.FuelingAddScreenDestination
-import com.example.vapmzsem.ui.Home.FuelingDetailDestination
-import com.example.vapmzsem.ui.Home.FuelingDetailScreen
-import com.example.vapmzsem.ui.Home.FuelingEditScreen
-import com.example.vapmzsem.ui.Home.FuelingEditScreenDestination
-import com.example.vapmzsem.ui.Home.FuelingScreen
-import com.example.vapmzsem.ui.Home.FuelingScreenDestination
+import com.example.vapmzsem.ui.Fueling.FuelingAddScreen
+import com.example.vapmzsem.ui.Fueling.FuelingAddScreenDestination
+import com.example.vapmzsem.ui.Fueling.FuelingDetailDestination
+import com.example.vapmzsem.ui.Fueling.FuelingDetailScreen
+import com.example.vapmzsem.ui.Fueling.FuelingEditScreen
+import com.example.vapmzsem.ui.Fueling.FuelingEditScreenDestination
+import com.example.vapmzsem.ui.Fueling.FuelingScreen
+import com.example.vapmzsem.ui.Fueling.FuelingScreenDestination
+import com.example.vapmzsem.ui.MainScreen
+import com.example.vapmzsem.ui.MainScreenDestination
 
 
 @Composable
@@ -24,9 +26,15 @@ fun MyNavHost(
 ){
     NavHost(
         navController = navController,
-        startDestination = FuelingScreenDestination.route,
+        startDestination = MainScreenDestination.route,
         modifier = modifier
     ) {
+        composable(route = MainScreenDestination.route){
+            MainScreen(
+                fuelingItemClicked = {navController.navigate("${FuelingDetailDestination.route}/${it}")},
+                fuelingNewClicked = {navController.navigate(FuelingAddScreenDestination.route)}
+            )
+        }
         composable(route=FuelingScreenDestination.route){
             FuelingScreen(
                 onNewFuelingClick = {navController.navigate(FuelingAddScreenDestination.route)},

@@ -1,16 +1,15 @@
 package com.example.vapmzsem.ui
 
-import android.app.Application
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vapmzsem.MyApplication
-import com.example.vapmzsem.ui.Home.FuelinViewModel
-import com.example.vapmzsem.ui.Home.FuelingAddViewModel
-import com.example.vapmzsem.ui.Home.FuelingDetailViewModel
-import com.example.vapmzsem.ui.Home.FuelingEditViewModel
+import com.example.vapmzsem.ui.Fueling.FuelinViewModel
+import com.example.vapmzsem.ui.Fueling.FuelingAddViewModel
+import com.example.vapmzsem.ui.Fueling.FuelingDetailViewModel
+import com.example.vapmzsem.ui.Fueling.FuelingEditViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {

@@ -1,4 +1,4 @@
-package com.example.vapmzsem.ui.Home
+package com.example.vapmzsem.ui.Fueling
 
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
