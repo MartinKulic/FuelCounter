@@ -1,25 +1,44 @@
 package com.example.vapmzsem.ui.Home
 
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.vapmzsem.data.AppRepository
 import com.example.vapmzsem.data.Fueling
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.util.Calendar
-import java.util.Date
 
 class FuelingAddViewModel(
     private val repository: AppRepository
 ) : ViewModel() {
-    var fuelingUiState by mutableStateOf(FuelingUiState())
+    val lastFueling : StateFlow<FuelingAsUi> = repository.getNewestFueling()
+        //.filterNotNull()
+        .map { it.toUi() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = FuelingAsUi()
+        )
+    /*TODO Nezobrazi poslendy odometer*/
+    var fuelingUiState by mutableStateOf(FuelingUiState(details = FuelingAsUi(odometter = lastFueling.value.odometter)))
         private set
 
-    fun updateUiState (fueligDetail: FuelingDetail){
+
+
+    fun updateUiState (fueligDetail: FuelingAsUi){
         fuelingUiState = FuelingUiState(isEntryValid = validateInput(fueligDetail), details = fueligDetail)
     }
-    fun validateInput(details : FuelingDetail = fuelingUiState.details) : Boolean{
+    fun validateInput(details : FuelingAsUi = fuelingUiState.details) : Boolean{
         return with(details){
             quantity.isNotBlank() && quantity.toFloatOrNull() != 0f && total_price.isNotBlank() && odometter >= "0"
         }
@@ -34,27 +53,6 @@ class FuelingAddViewModel(
 
 data class FuelingUiState(
     val isEntryValid : Boolean = false,
-    val details: FuelingDetail = FuelingDetail()
+    val details: FuelingAsUi = FuelingAsUi()
 
 )
-data class FuelingDetail(
-    val quantity : String = "",
-    val total_price : String = "",
-    val full_tank : Boolean = false,
-    val fuel_type : String = "",
-    val fueling_Station : String = "",
-    val time : Calendar = Calendar.getInstance(),
-    val odometter: String = "0"
-){
-    fun toFueling() : Fueling {
-        return Fueling(
-            quantity = quantity.toFloatOrNull() ?: 1f,
-            total_price = total_price.toFloatOrNull() ?: 1f,
-            full_tank = full_tank,
-            fuel_type = fuel_type,
-            fueling_Station = fueling_Station,
-            time = time.time,
-            odometter = odometter.toIntOrNull() ?: 0
-        )
-    }
-}

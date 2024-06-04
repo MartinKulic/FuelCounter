@@ -16,7 +16,7 @@ data class Fueling (
     val full_tank : Boolean = false,
     val fuel_type : String? = null,
     val fueling_Station : String? = null,
-    val time : Date? = Date(),
+    val time : Date = Date(),
     val odometter: Int? = null
 )
 

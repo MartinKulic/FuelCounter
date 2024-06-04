@@ -18,7 +18,7 @@ class Converters{
         return date?.time?.toLong()
     }
 }
-@Database(entities = [Fueling::class, Route::class], version = 1, exportSchema = false)
+@Database(entities = [Fueling::class, Route::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun routesDao() : RouteDao

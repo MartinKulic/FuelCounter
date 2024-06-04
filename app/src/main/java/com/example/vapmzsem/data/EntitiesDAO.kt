@@ -22,7 +22,7 @@ interface FuelingDao {
     @Query("Select * from fuelings Where id_F = :id")
     fun getFueling(id : Int) : Flow<Fueling>
 
-    @Query("Select * from fuelings Order by time")
+    @Query("Select * from fuelings Order by time DESC")
     fun getAllFuelings() : Flow<List<Fueling>>
 
     @Query("Select * from fuelings where time in (select max(time) from fuelings)")
