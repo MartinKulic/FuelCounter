@@ -58,7 +58,7 @@ object FuelingDetailDestination : NavigationDestination{
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FuelingDetailScreen(
-    onEditClick : (Int) -> Unit,
+    onEditClick : (Int) -> Unit ={},
     navigateBack : ()->Unit,
     onNavigateUp: () -> Unit = navigateBack,
     modifier: Modifier = Modifier,
@@ -80,7 +80,8 @@ fun FuelingDetailScreen(
                     viewModel.delete()
                     navigateBack()
                 }
-            }
+            } ,
+            onEditClick = {onEditClick(viewModel.uiState.value.id)}
         )}
     ) {
         innerPadding ->
@@ -97,7 +98,8 @@ fun FuelingDetailScreen(
 }
 @Composable
 fun FuelingDetailBottomBar(
-    onDeleteClick : () -> Unit
+    onDeleteClick : () -> Unit,
+    onEditClick: () -> Unit
 )
 {
     var deleteConfirmation by rememberSaveable {
@@ -110,7 +112,7 @@ fun FuelingDetailBottomBar(
         OutlinedButton(onClick = { deleteConfirmation = true }, modifier = Modifier.fillMaxWidth(0.5f)) {
             Text(text= "Vymazať")
         }
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth() ) {
+        Button(onClick = onEditClick, modifier = Modifier.fillMaxWidth() ) {
             Text(text = "Upraviť")
         }
     }

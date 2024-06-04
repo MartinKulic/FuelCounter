@@ -66,10 +66,6 @@ fun FuelingAddScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    coroutineScope.launch {
-
-    }
-
     Scaffold (
         topBar = {
             MyTopAppBar(title = stringResource(FuelingAddScreenDestination.titleRes),

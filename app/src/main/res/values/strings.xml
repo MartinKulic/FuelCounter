@@ -4,4 +4,5 @@
     <string name="fueling_add_screen_title">Pridaj Tankovanie</string>
     <string name="back_button">Späť</string>
     <string name="fueling_detail_screen_title">Tankovanie</string>
+    <string name="uprav_tankovanie">Uprav tankovanie</string>
 </resources>

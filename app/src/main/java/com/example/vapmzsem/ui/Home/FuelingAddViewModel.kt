@@ -37,7 +37,8 @@ class FuelingAddViewModel(
     }
 
     fun updateUiState (fueligDetail: FuelingAsUi){
-        fuelingUiState = FuelingUiState(isEntryValid = validateInput(fueligDetail), details = fueligDetail)
+        //fuelingUiState = FuelingUiState(isEntryValid = validateInput(fueligDetail), details = fueligDetail)
+        fuelingUiState = fuelingUiState.copy(isEntryValid = validateInput(fueligDetail), details = fueligDetail)
     }
 
     fun validateInput(details : FuelingAsUi = fuelingUiState.details) : Boolean{

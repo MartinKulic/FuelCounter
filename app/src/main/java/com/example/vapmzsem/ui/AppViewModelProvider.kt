@@ -10,6 +10,7 @@ import com.example.vapmzsem.MyApplication
 import com.example.vapmzsem.ui.Home.FuelinViewModel
 import com.example.vapmzsem.ui.Home.FuelingAddViewModel
 import com.example.vapmzsem.ui.Home.FuelingDetailViewModel
+import com.example.vapmzsem.ui.Home.FuelingEditViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -28,6 +29,13 @@ object AppViewModelProvider {
             FuelingDetailViewModel(
                 this.createSavedStateHandle(),
                 myApplication().container.appRepository
+            )
+        }
+        //FuelingEdit
+        initializer {
+            FuelingEditViewModel(
+                savedStateHandle = this.createSavedStateHandle(),
+                repository = myApplication().container.appRepository
             )
         }
     }

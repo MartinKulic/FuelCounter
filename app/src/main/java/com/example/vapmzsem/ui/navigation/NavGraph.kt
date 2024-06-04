@@ -11,6 +11,8 @@ import com.example.vapmzsem.ui.Home.FuelingAddScreen
 import com.example.vapmzsem.ui.Home.FuelingAddScreenDestination
 import com.example.vapmzsem.ui.Home.FuelingDetailDestination
 import com.example.vapmzsem.ui.Home.FuelingDetailScreen
+import com.example.vapmzsem.ui.Home.FuelingEditScreen
+import com.example.vapmzsem.ui.Home.FuelingEditScreenDestination
 import com.example.vapmzsem.ui.Home.FuelingScreen
 import com.example.vapmzsem.ui.Home.FuelingScreenDestination
 
@@ -42,10 +44,16 @@ fun MyNavHost(
                 type = NavType.IntType
             })
         ){
-            FuelingDetailScreen(onEditClick = {},
+            FuelingDetailScreen(onEditClick = {navController.navigate("${FuelingEditScreenDestination.route}/${it}")},
                 navigateBack = {navController.popBackStack()},
                 onNavigateUp = {navController.navigateUp()})
-
+        }
+        composable(route = FuelingEditScreenDestination.routeWithArgs,
+        arguments = listOf(navArgument(FuelingEditScreenDestination.fuelingIdArg){
+            type = NavType.IntType
+        })
+        ){
+            FuelingEditScreen(navigateBack = { navController.popBackStack()}, onNavigateUp = {navController.navigateUp()})
         }
 
     }
