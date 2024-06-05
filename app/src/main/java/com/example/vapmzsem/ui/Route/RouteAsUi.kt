@@ -26,10 +26,11 @@ data class RouteAsUi(
     }
 
     fun toRoute() : Route {
+        title.ifEmpty { SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(finish_time.time)}
         return Route(
             id_R = id,
             id_F = id_F,
-            title = title.ifEmpty { SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(finish_time)},
+            title = title,
             distance = distance.toFloatOrNull() ?: 0f,
             start_time = start_time.time,
             finish_time = finish_time.time,

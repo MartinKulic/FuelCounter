@@ -17,5 +17,6 @@ interface AppRepository {
     fun getAllRoutes() : Flow<List<Route>>
     fun getAllRoutesToFueling(id:Int) : Flow<List<Route>>
     fun getNewestRoute() : Flow<Route?>
-    fun findCorespondingFueling(time : Date) : Int?
+    suspend fun findCorespondingFueling(time : Date) : Int?
+    fun findCorespondingFueling(id : Int) : Fueling?
 }

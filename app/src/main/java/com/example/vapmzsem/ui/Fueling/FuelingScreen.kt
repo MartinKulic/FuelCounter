@@ -126,7 +126,7 @@ fun FuelingItem(
                         "dd.MM.yyyy",
                         Locale.getDefault()
                     ).format(item.time?.time ?: 0),
-                    value = SimpleDateFormat("hh:mm", Locale.getDefault()).format(
+                    value = SimpleDateFormat("HH:mm", Locale.getDefault()).format(
                         item.time?.time ?: 0
                     ),
                     widthfill = 0.24f

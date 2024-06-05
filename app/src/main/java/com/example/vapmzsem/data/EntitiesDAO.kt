@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.vapmzsem.ui.Fueling.FuelingAsUi
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
@@ -30,7 +31,10 @@ interface FuelingDao {
     fun getNewestFueling() : Flow<Fueling?>
 
     @Query("Select id_F from fuelings where time in (select max(time) from fuelings where :finishTime >= time)")
-    fun findCorespondingFueling(finishTime : Date) : Int?
+    suspend fun findCorespondingFueling(finishTime : Date) : Int?
+
+    @Query("Select * from fuelings where id_F = :id")
+    fun findCorespondingFueling(id:Int) : Fueling?
 
 }
 

@@ -21,6 +21,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -99,14 +101,29 @@ fun RouteItem(item: RouteAsUi, modifier: Modifier) {
             modifier = modifier,
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ){
-            Row(modifier = Modifier.fillMaxWidth()){
-                Text(text= item.title, fontSize = 15.sp)
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                Text(text= item.title, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
             }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(item.start_time))
-                Text(text = SimpleDateFormat("hh:mm:ss", Locale.getDefault()).format(item.finish_time.timeInMillis - item.start_time.timeInMillis))
+            Row {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = SimpleDateFormat(
+                            "dd.MM.yyyy",
+                            Locale.getDefault()
+                        ).format(item.start_time.timeInMillis)
+                    )
+                    Text(
+                        text = SimpleDateFormat(
+                            "hh:mm:ss",
+                            Locale.getDefault()
+                        ).format(item.finish_time.timeInMillis - item.start_time.timeInMillis)
+                    )
+                }
+                MyItemDetailDisplay("km", item.distance)
             }
-            MyItemDetailDisplay("km", item.distance)
 
         }
     }
@@ -118,7 +135,7 @@ fun RouteListPreview(){
     MaterialTheme{
         Surface {
             val list = listOf(
-                Route(id_R = 0, id_F = null, title = "", distance = 40f, start_time =  Date(), finish_time =  Date(), finish_odometer = 200, start_point = "Kanianka", finish_point = "Zilina" ).toUi(),
+                Route(id_R = 0, id_F = null, title = "10.05.2024 11:45:34", distance = 40f, start_time =  Date(), finish_time =  Date(), finish_odometer = 200, start_point = "Kanianka", finish_point = "Zilina" ).toUi(),
                 Route(id_R = 1, id_F = null, title = "Výlet niekde", distance = 40f, start_time =  Date(), finish_time =  Date(), finish_odometer = 200, start_point = "Kanianka", finish_point = "Zilina" ).toUi()
             )
             RouteList(onItemClicked = {}, routeList = list)

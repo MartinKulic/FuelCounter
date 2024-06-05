@@ -151,7 +151,7 @@ fun FuelingAddForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
         )
 
-        DateTimeRow(details = details, onValueChange = onValueChange)
+        DateTimeRow(initCalendar = details.time, onValueChange = {onValueChange(details.copy(time = it))})
 
         Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = "Plná nádrž")
@@ -183,8 +183,8 @@ fun FuelingAddForm(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimeRow(
-    details: FuelingAsUi,
-    onValueChange: (FuelingAsUi) -> Unit,
+    initCalendar: Calendar,
+    onValueChange: (Calendar) -> Unit,
     modifier: Modifier = Modifier
 ){
     var datePickerVisible by remember { mutableStateOf(false) }
@@ -200,7 +200,7 @@ fun DateTimeRow(
             OutlinedCard (
             ){
                 Text(text = "Dátum", fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-                Text(text =  SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(details.time?.time ?: Date()), //details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: ""
+                Text(text =  SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(initCalendar.timeInMillis ?: Date()), //details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: ""
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
         }
@@ -212,14 +212,14 @@ fun DateTimeRow(
             OutlinedCard (
             ){
                 Text(text = "Čas", fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-                Text(text = details.time.let { SimpleDateFormat("HH:mm", Locale.getDefault()).format(it?.time ?: Date()) },
+                Text(text = initCalendar.time.let { SimpleDateFormat("HH:mm", Locale.getDefault()).format(it.time ?: Date()) },
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
         }
     }
 
     if(datePickerVisible){
-        val dateState  = rememberDatePickerState( initialSelectedDateMillis = details.time?.timeInMillis )
+        val dateState  = rememberDatePickerState( initialSelectedDateMillis = initCalendar.timeInMillis )
         Column {
             DatePickerDialog(
                 dismissButton = {
@@ -235,7 +235,7 @@ fun DateTimeRow(
                         calendar.set(Calendar.MINUTE, calendarTime.second)
                         calendar.set(Calendar.SECOND, calendarTime.third)
 
-                        onValueChange(details.copy( time = calendar))
+                        onValueChange(calendar)
                         datePickerVisible = false
                     }) {
                         Text(text = "OK")
@@ -254,7 +254,7 @@ fun DateTimeRow(
                 _, hours, minutes ->
                 calendar.set(Calendar.HOUR_OF_DAY, hours)
                 calendar.set(Calendar.MINUTE, minutes)
-                onValueChange(details.copy(time = calendar))
+                onValueChange(calendar)
                 timePickerVisible = false
             },
             calendar.get(Calendar.HOUR_OF_DAY),

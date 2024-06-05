@@ -61,7 +61,11 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
         return routeDao.getNewestRoute()
     }
 
-    override fun findCorespondingFueling(time: Date): Int? {
+    override suspend fun findCorespondingFueling(time: Date): Int? {
         return fuelingDao.findCorespondingFueling(time)
+    }
+
+    override fun findCorespondingFueling(id: Int): Fueling? {
+        return fuelingDao.findCorespondingFueling(id)
     }
 }
