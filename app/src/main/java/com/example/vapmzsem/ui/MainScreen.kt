@@ -27,8 +27,9 @@ object MainScreenDestination : NavigationDestination{
 @Composable
 fun MainScreen(
     fuelingItemClicked : (Int) -> Unit,
-    fuelingNewClicked : () -> Unit
-
+    fuelingNewClicked : () -> Unit,
+    routeItemClicked: (Int) -> Unit,
+    routeNewClicked: () -> Unit
 ){
     var tabIndex by rememberSaveable {
         mutableStateOf(1)
@@ -56,7 +57,10 @@ fun MainScreen(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                     top = innerPadding.calculateTopPadding()
-                ))
+                ),
+                onNewRouteClick = routeNewClicked,
+                onItemClicked = routeItemClicked
+                )
         }
     }
 }

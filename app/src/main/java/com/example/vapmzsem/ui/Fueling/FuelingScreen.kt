@@ -121,7 +121,7 @@ fun FuelingItem(
                     .padding(top = 10.dp, bottom = 10.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MyItemDisplay(
+                MyItemDetailDisplay(
                     unit = SimpleDateFormat(
                         "dd.MM.yyyy",
                         Locale.getDefault()
@@ -131,15 +131,15 @@ fun FuelingItem(
                     ),
                     widthfill = 0.24f
                 )
-                MyItemDisplay(
+                MyItemDetailDisplay(
                     unit = "km", value = DecimalFormat(
                         "###,###,###", DecimalFormatSymbols(
                             Locale.getDefault()
                         )
-                    ).format(item.odometter),
+                    ).format(item.odometer),
                     widthfill = 0.27f
                 )
-                MyItemDisplay(
+                MyItemDetailDisplay(
                     unit = "l", value = DecimalFormat(
                         "###,###.00", DecimalFormatSymbols(
                             Locale.getDefault()
@@ -147,7 +147,7 @@ fun FuelingItem(
                     ).format(item.quantity),
                     widthfill = 0.3f
                 )
-                MyItemDisplay(
+                MyItemDetailDisplay(
                     unit = Currency.getInstance(Locale.getDefault()).symbol + "/l",
                     value = DecimalFormat(
                         "###,###.000", DecimalFormatSymbols(
@@ -156,7 +156,7 @@ fun FuelingItem(
                     ).format(item.total_price / item.quantity),
                     widthfill = 0.4f
                 )
-                MyItemDisplay(
+                MyItemDetailDisplay(
                     unit = Currency.getInstance(Locale.getDefault()).symbol, value = DecimalFormat(
                         "###,###.00", DecimalFormatSymbols(
                             Locale.getDefault()
@@ -169,7 +169,7 @@ fun FuelingItem(
     }
 }
 @Composable
-fun MyItemDisplay(
+fun MyItemDetailDisplay(
     unit: String,
     value: String,
     widthfill : Float = 1f
@@ -187,7 +187,7 @@ fun FuelingItemPreview(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        FuelingItem(item = Fueling(1, 31.24f, 51.85f, false, time = Date(), odometter = 999690),
+        FuelingItem(item = Fueling(1, 31.24f, 51.85f, false, time = Date(), odometer = 999690),
             modifier = Modifier.padding(8.dp)
         )
     }
@@ -211,7 +211,7 @@ fun FuelingScreenPreviewEmplty(){
 fun FuelingScreenPreviewSomeItems(){
 
             val someItems = listOf(
-                Fueling(id_F = 0, quantity = 50.5f, total_price = 60.99f, full_tank = true, fuel_type = null, fueling_Station = null, time = Date(), odometter = null ),
+                Fueling(id_F = 0, quantity = 50.5f, total_price = 60.99f, full_tank = true, fuel_type = null, fueling_Station = null, time = Date(), odometer = null ),
                 Fueling(id_F = 1, quantity = 42.87f, total_price = 50.12f),
                 Fueling(id_F = 2, quantity = 42.87f, total_price = 50.12f),
                 Fueling(id_F = 3, quantity = 42.87f, total_price = 50.12f),
@@ -225,7 +225,7 @@ fun FuelingScreenPreviewSomeItems(){
                 Fueling(id_F = 13, quantity = 42.87f, total_price = 50.12f),
                 Fueling(id_F = 14, quantity = 42.87f, total_price = 50.12f),
                 Fueling(id_F = 15, quantity = 60.0f, total_price = 100f),
-                Fueling(id_F = 16, quantity = 45.99f, total_price = 62.71f, fuel_type = "Natural95", full_tank = true, fueling_Station = "Rajec začiaton Shell", odometter = 92015)
+                Fueling(id_F = 16, quantity = 45.99f, total_price = 62.71f, fuel_type = "Natural95", full_tank = true, fueling_Station = "Rajec začiaton Shell", odometer = 92015)
             )
 Surface(
 modifier = Modifier.fillMaxSize(),

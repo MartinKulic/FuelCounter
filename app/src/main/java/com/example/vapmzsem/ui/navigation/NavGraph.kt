@@ -17,6 +17,8 @@ import com.example.vapmzsem.ui.Fueling.FuelingScreen
 import com.example.vapmzsem.ui.Fueling.FuelingScreenDestination
 import com.example.vapmzsem.ui.MainScreen
 import com.example.vapmzsem.ui.MainScreenDestination
+import com.example.vapmzsem.ui.Route.RouteAddScreen
+import com.example.vapmzsem.ui.Route.RouteAddScreenDestination
 
 
 @Composable
@@ -32,13 +34,16 @@ fun MyNavHost(
         composable(route = MainScreenDestination.route){
             MainScreen(
                 fuelingItemClicked = {navController.navigate("${FuelingDetailDestination.route}/${it}")},
-                fuelingNewClicked = {navController.navigate(FuelingAddScreenDestination.route)}
+                fuelingNewClicked = {navController.navigate(FuelingAddScreenDestination.route)},
+                routeItemClicked = {},
+                routeNewClicked = {navController.navigate(RouteAddScreenDestination.route)},
             )
         }
         composable(route=FuelingScreenDestination.route){
             FuelingScreen(
                 onNewFuelingClick = {navController.navigate(FuelingAddScreenDestination.route)},
-                onItemClicked = {navController.navigate("${FuelingDetailDestination.route}/${it}")}
+                onItemClicked = {navController.navigate("${FuelingDetailDestination.route}/${it}")},
+
             )
         }
         composable(route = FuelingAddScreenDestination.route){
@@ -61,7 +66,19 @@ fun MyNavHost(
             type = NavType.IntType
         })
         ){
-            FuelingEditScreen(navigateBack = { navController.popBackStack()}, onNavigateUp = {navController.navigateUp()})
+            FuelingEditScreen(
+                navigateBack = { navController.popBackStack()},
+                onNavigateUp = {navController.navigateUp()},
+                onModificationConfirm = {
+                    navController.popBackStack(MainScreenDestination.route, inclusive = false)
+                }
+            )
+        }
+        composable(route = RouteAddScreenDestination.route){
+            RouteAddScreen(
+                onNavigateBack = {navController.popBackStack()},
+                onNavigateUp = {navController.navigateUp()},
+            )
         }
 
     }

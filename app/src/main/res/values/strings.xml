@@ -6,4 +6,6 @@
     <string name="fueling_detail_screen_title">Tankovanie</string>
     <string name="uprav_tankovanie">Uprav tankovanie</string>
     <string name="vamz_sem_prac">VAMZ sem. Prac</string>
+    <string name="cesty">Cesty</string>
+    <string name="nov_cesta">Nová Cesta</string>
 </resources>

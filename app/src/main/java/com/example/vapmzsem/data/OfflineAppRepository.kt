@@ -1,6 +1,7 @@
 package com.example.vapmzsem.data
 
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 class OfflineAppRepository(private val fuelingDao : FuelingDao, private val routeDao: RouteDao) : AppRepository {
     override suspend fun insert(item: Fueling) {
@@ -8,6 +9,11 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
     }
 
     override suspend fun insert(item: Route) {
+        val corespondingFuelingId : Int? = findCorespondingFueling(item.finish_time)
+        val fuelingToInser = item.copy(id_F = corespondingFuelingId)
+        routeDao.insert(fuelingToInser)
+    }
+    suspend fun insertRaw(item: Route){
         routeDao.insert(item)
     }
 
@@ -51,4 +57,11 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
         return  routeDao.getAllRoutesToFueling(id)
     }
 
+    override fun getNewestRoute(): Flow<Route?> {
+        return routeDao.getNewestRoute()
+    }
+
+    override fun findCorespondingFueling(time: Date): Int? {
+        return fuelingDao.findCorespondingFueling(time)
+    }
 }

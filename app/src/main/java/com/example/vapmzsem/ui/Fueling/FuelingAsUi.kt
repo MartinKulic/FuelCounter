@@ -22,7 +22,7 @@ data class FuelingAsUi(
             fuel_type = fuel_type,
             fueling_Station = fueling_Station,
             time = time.time,
-            odometter = odometter.toIntOrNull() ?: 0
+            odometer = odometter.toIntOrNull() ?: 0
         )
     }
 }
@@ -38,6 +38,6 @@ fun Fueling.toUi() : FuelingAsUi{
         fuel_type = fuel_type ?: "",
         fueling_Station = fueling_Station ?: "",
         time = calTime,
-        odometter = odometter.toString()
+        odometter = odometer.toString()
     )
 }

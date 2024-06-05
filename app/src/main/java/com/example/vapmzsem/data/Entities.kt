@@ -1,6 +1,5 @@
 package com.example.vapmzsem.data
 
-import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -17,7 +16,7 @@ data class Fueling (
     val fuel_type : String? = null,
     val fueling_Station : String? = null,
     val time : Date = Date(),
-    val odometter: Int? = null
+    val odometer: Int? = null
 )
 
 @Entity(tableName = "routes", foreignKeys = [ForeignKey(entity = Fueling::class, parentColumns = ["id_F"], childColumns = ["id_F"])])
@@ -25,10 +24,11 @@ data class Route(
     @PrimaryKey(autoGenerate = true)
     val id_R : Int = 0,
     val id_F : Int?,
+    val title : String,
     val distance : Float,
     val start_time: Date,
     val finish_time : Date,
     val start_point : String?,
     val finish_point : String?,
-    val start_odometter: Int?
+    val finish_odometer: Int
 )

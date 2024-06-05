@@ -1,6 +1,7 @@
 package com.example.vapmzsem.data
 
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 interface AppRepository {
     suspend fun insert(item: Fueling)
@@ -15,4 +16,6 @@ interface AppRepository {
     fun getRoute(id : Int) : Flow<Route>
     fun getAllRoutes() : Flow<List<Route>>
     fun getAllRoutesToFueling(id:Int) : Flow<List<Route>>
+    fun getNewestRoute() : Flow<Route?>
+    fun findCorespondingFueling(time : Date) : Int?
 }

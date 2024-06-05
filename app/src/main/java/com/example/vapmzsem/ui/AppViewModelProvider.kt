@@ -10,6 +10,9 @@ import com.example.vapmzsem.ui.Fueling.FuelinViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingAddViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingDetailViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingEditViewModel
+import com.example.vapmzsem.ui.Route.RouteAddViewModel
+import com.example.vapmzsem.ui.Route.RouteScreen
+import com.example.vapmzsem.ui.Route.RouteViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -34,6 +37,20 @@ object AppViewModelProvider {
         initializer {
             FuelingEditViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
+                repository = myApplication().container.appRepository
+            )
+        }
+
+
+        //RouteScreen
+        initializer {
+            RouteViewModel(
+                repository = myApplication().container.appRepository
+            )
+        }
+        //RouteAff
+        initializer {
+            RouteAddViewModel(
                 repository = myApplication().container.appRepository
             )
         }

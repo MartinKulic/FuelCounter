@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -72,23 +74,30 @@ fun FuelingAddScreen(
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
+        },
+        bottomBar = {
+            Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center ){
+                Button(onClick = {
+                    coroutineScope.launch {
+                        viewModel.saveFueling()
+                        onNavigateBack()
+                    } },
+                    Modifier.fillMaxWidth(), enabled = viewModel.fuelingUiState.isEntryValid) {
+                    Text(text = "Potvrď")
+                }
+            }
         }
     ) {
         innerPadding ->
             FuelingAddBody(
                 fuelingUiState = viewModel.fuelingUiState,
                 onValueChange = viewModel::updateUiState,
-                onConfirmClick = {
-                                 coroutineScope.launch {
-                                    viewModel.saveFueling()
-                                     onNavigateBack()
-                                 }
-                },
                 modifier = Modifier
                     .padding(
-                        start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
-                        end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
-                        top = innerPadding.calculateTopPadding()
+//                        start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+//                        end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
+                        top = innerPadding.calculateTopPadding(),
+                        bottom = innerPadding.calculateBottomPadding()
                     )
                     //.verticalScroll(rememberScrollState())
                     .fillMaxWidth())
@@ -99,18 +108,12 @@ fun FuelingAddScreen(
 fun FuelingAddBody(
     fuelingUiState: FuelingUiState,
     onValueChange : (FuelingAsUi)->Unit,
-    onConfirmClick: ()->Unit,
     modifier: Modifier = Modifier
 ){
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = modifier.verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween) {
 
         FuelingAddForm(details = fuelingUiState.details, onValueChange = onValueChange, previousOdometerValue = fuelingUiState.lastOdometer)
 
-        Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center ){
-            Button(onClick = onConfirmClick, modifier.fillMaxWidth(), enabled = fuelingUiState.isEntryValid) {
-                Text(text = "Potvrď")
-            }
-        }
     }
 }
 
@@ -279,7 +282,7 @@ fun FuelingAddBodyPreview(){
             }) {
                     innerPadding ->
                     FuelingAddBody(fuelingUiState = FuelingUiState(true,FuelingAsUi(quantity = "50.4", total_price = "72.54", full_tank = true, fuel_type = "Natural95", odometter = "90123")),
-                        onValueChange = {}, onConfirmClick = {  },
+                        onValueChange = {},
                         modifier = Modifier
                             .padding(
                                 start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),

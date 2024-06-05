@@ -19,8 +19,8 @@ class FuelingAddViewModel(
         viewModelScope.launch {
             repository.getNewestFueling().collect{
                 newestFuelnig -> newestFuelnig?.let {
-                    updateUiState(fuelingUiState.details.copy(odometter = it.odometter.toString()))
-                    fuelingUiState = fuelingUiState.copy(lastOdometer = it.odometter.toString())
+                    updateUiState(fuelingUiState.details.copy(odometter = it.odometer.toString()))
+                    fuelingUiState = fuelingUiState.copy(lastOdometer = it.odometer.toString())
             }
             }
         }
