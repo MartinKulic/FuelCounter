@@ -19,6 +19,10 @@ import com.example.vapmzsem.ui.MainScreen
 import com.example.vapmzsem.ui.MainScreenDestination
 import com.example.vapmzsem.ui.Route.RouteAddScreen
 import com.example.vapmzsem.ui.Route.RouteAddScreenDestination
+import com.example.vapmzsem.ui.Route.RouteDetailDestinantion
+import com.example.vapmzsem.ui.Route.RouteDetailScreen
+import com.example.vapmzsem.ui.Route.RouteEditDestination
+import com.example.vapmzsem.ui.Route.RouteEditScreen
 
 
 @Composable
@@ -35,7 +39,7 @@ fun MyNavHost(
             MainScreen(
                 fuelingItemClicked = {navController.navigate("${FuelingDetailDestination.route}/${it}")},
                 fuelingNewClicked = {navController.navigate(FuelingAddScreenDestination.route)},
-                routeItemClicked = {},
+                routeItemClicked = {navController.navigate("${RouteDetailDestinantion.route}/${it}")},
                 routeNewClicked = {navController.navigate(RouteAddScreenDestination.route)},
             )
         }
@@ -78,6 +82,32 @@ fun MyNavHost(
             RouteAddScreen(
                 onNavigateBack = {navController.popBackStack()},
                 onNavigateUp = {navController.navigateUp()},
+            )
+        }
+        composable(route = RouteDetailDestinantion.routeWithArgs,
+            arguments = listOf(navArgument(RouteDetailDestinantion.routeIdArg){
+                type = NavType.IntType
+            })
+        ){
+            RouteDetailScreen(navigateBack = { navController.popBackStack() },
+                onNavigateUp = {navController.navigateUp()},
+                onEditClick = {navController.navigate("${RouteEditDestination.route}/${it}")}
+            )
+        }
+        composable(route = RouteEditDestination.routeWithArgs,
+            arguments = listOf(navArgument(RouteDetailDestinantion.routeIdArg){
+                type = NavType.IntType
+            })
+        ){
+            RouteEditScreen(
+                navigateBack = {navController.popBackStack()},
+                navigateUp = {navController.navigateUp()},
+                onModificationConfirm = {
+                    navController.popBackStack(
+                        MainScreenDestination.route,
+                        inclusive = false
+                    )
+                }
             )
         }
 

@@ -22,7 +22,9 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
     }
 
     override suspend fun update(item: Route) {
-        routeDao.update(item)
+        val corespondingFuelingId : Int? = findCorespondingFueling(item.finish_time)
+        val fuelingToInser = item.copy(id_F = corespondingFuelingId)
+        routeDao.update(fuelingToInser)
     }
 
     override suspend fun delete(item: Fueling) {

@@ -165,14 +165,12 @@ fun FuelingAddForm(
             value = details.fuel_type,
             label = {Text("Druh paliva")},
             onValueChange = {onValueChange(details.copy(fuel_type = it))},
-            leadingIcon = {Text("km")},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
         )
         OutlinedTextField(
             value = details.fueling_Station,
             label = {Text("Čerpacia stanica")},
             onValueChange = {onValueChange(details.copy(fueling_Station = it))},
-            leadingIcon = {Text("km")},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Go)
         )
 

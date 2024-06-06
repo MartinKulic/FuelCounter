@@ -26,11 +26,17 @@ data class RouteAsUi(
     }
 
     fun toRoute() : Route {
-        title.ifEmpty { SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(finish_time.time)}
+        val fixTitle : String =
+        if (title.isEmpty()){
+            SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(finish_time.time)
+        } else {
+            title
+        }
+
         return Route(
             id_R = id,
             id_F = id_F,
-            title = title,
+            title = fixTitle,
             distance = distance.toFloatOrNull() ?: 0f,
             start_time = start_time.time,
             finish_time = finish_time.time,

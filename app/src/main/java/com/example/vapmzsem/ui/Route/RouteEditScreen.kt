@@ -1,4 +1,4 @@
-package com.example.vapmzsem.ui.Fueling
+package com.example.vapmzsem.ui.Route
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vapmzsem.MyTopAppBar
 import com.example.vapmzsem.R
@@ -23,47 +25,40 @@ import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
-object FuelingEditScreenDestination : NavigationDestination{
-    override val route: String = "fueling_edit"
-    override val titleRes: Int = R.string.uprav_tankovanie
-    const val fuelingIdArg = "fuelingID"
-    val routeWithArgs = "${route}/{$fuelingIdArg}"
+object RouteEditDestination :NavigationDestination {
+    override val route: String = "route_edit"
+    override val titleRes: Int = R.string.route_edit_screen_title
+    const val routeIdArg = "routeId"
+    val routeWithArgs = "${route}/{$routeIdArg}"
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FuelingEditScreen(
+fun RouteEditScreen(
     navigateBack : ()->Unit,
-    onNavigateUp: () -> Unit = navigateBack,
-    onModificationConfirm: () -> Unit = navigateBack,
-    modifier: Modifier = Modifier,
-    viewModel: FuelingEditViewModel  = viewModel(factory = AppViewModelProvider.Factory)
+    navigateUp: ()->Unit = navigateBack,
+    onModificationConfirm : ()->Unit = navigateBack,
+    viewModel : RouteEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ){
     val coroutineScope = rememberCoroutineScope()
-    Scaffold (
-        topBar = {
-            MyTopAppBar(title = stringResource(FuelingEditScreenDestination.titleRes),
-                canNavigateBack = true,
-                navigateUp = onNavigateUp
-            )
-        },
+    Scaffold(
+        topBar = { MyTopAppBar(title = stringResource(id = RouteEditDestination.titleRes), canNavigateBack = true, navigateUp = navigateUp)},
         bottomBar = {
             Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center ){
-                Button(onClick = {
-                    coroutineScope.launch {
-                        viewModel.saveFueling()
-                        onModificationConfirm()
-                    } },
-                    Modifier.fillMaxWidth(), enabled = viewModel.fuelingUiState.isEntryValid) {
-                    Text(text = "Potvrď")
-                }
+            Button(onClick = {
+                coroutineScope.launch {
+                    viewModel.updateRoute()
+                    onModificationConfirm()
+                } },
+                Modifier.fillMaxWidth(), enabled = viewModel.routeUiState.isEntryValid) {
+                Text(text = "Potvrď")
             }
         }
+        }
     ) {
-            innerPadding ->
-        FuelingAddBody(
-            fuelingUiState = viewModel.fuelingUiState,
+        innerPadding -> 
+        RouteAddBody(
+            fuelingUiState = viewModel.routeUiState,
             onValueChange = viewModel::updateUiState,
             modifier = Modifier
                 .padding(
@@ -73,6 +68,8 @@ fun FuelingEditScreen(
                     bottom = innerPadding.calculateBottomPadding()
                 )
                 //.verticalScroll(rememberScrollState())
-                .fillMaxWidth())
+                .fillMaxWidth()
+        )
+
     }
 }

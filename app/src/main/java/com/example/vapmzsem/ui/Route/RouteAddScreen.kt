@@ -75,7 +75,7 @@ fun RouteAddScreen(
         RouteAddBody(
             fuelingUiState = viewModel.routeUiState,
             onValueChange = viewModel::updateUiState,
-            viewModel =viewModel,
+            //viewModel =viewModel,
             modifier = Modifier
                 .padding(
 //                        start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -89,7 +89,10 @@ fun RouteAddScreen(
 }
 
 @Composable
-fun RouteAddBody(fuelingUiState: RouteAddUiState, onValueChange: (RouteAsUi)->Unit, viewModel: RouteAddViewModel, modifier: Modifier) {
+fun RouteAddBody(
+    fuelingUiState: RouteAddUiState,
+    onValueChange: (RouteAsUi)->Unit,
+    modifier: Modifier) {
 
     val detail = fuelingUiState.details
 

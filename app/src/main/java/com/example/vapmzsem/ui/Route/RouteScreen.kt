@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -53,13 +54,13 @@ fun RouteScreen(
 ){
     val uiState by viewModel.routeScreenUiState.collectAsState()
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(){
-            Button(onClick = onNewRouteClick) {
+            Button(onClick = onNewRouteClick, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Nová Cesta")
             }
         }
-        RouteList(onItemClicked = onItemClicked, routeList = uiState.routesList)
+        RouteList(onItemClicked = onItemClicked, routeList = uiState.routesList, modifier = Modifier.padding(top = 10.dp))
     }
 }
 
@@ -75,8 +76,8 @@ fun RouteList(
     }
     else{
         LazyColumn(
-            modifier = modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             items(
                 items = routeList,
@@ -84,7 +85,8 @@ fun RouteList(
             ) { route ->
                 RouteItem(
                     item = route,
-                    modifier = modifier
+                    modifier = Modifier
+                        .padding(5.dp)
                         .fillMaxWidth()
                         .clickable { onItemClicked(route.id) }
                 )
@@ -96,7 +98,7 @@ fun RouteList(
 
 @Composable
 fun RouteItem(item: RouteAsUi, modifier: Modifier) {
-    Row(modifier = Modifier.fillMaxWidth()){
+    Row(modifier = modifier.fillMaxWidth()){
         ElevatedCard (
             modifier = modifier,
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
@@ -104,7 +106,12 @@ fun RouteItem(item: RouteAsUi, modifier: Modifier) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
                 Text(text= item.title, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
             }
-            Row {
+            if (item.start_point.isNotEmpty() || item.finish_point.isNotEmpty()) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                    Text(text= "${item.start_point} -> ${item.finish_point}", fontSize = 15.sp, textAlign = TextAlign.Center)
+                }
+            }
+            Row{
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center

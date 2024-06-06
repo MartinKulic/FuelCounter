@@ -11,6 +11,8 @@ import com.example.vapmzsem.ui.Fueling.FuelingAddViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingDetailViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingEditViewModel
 import com.example.vapmzsem.ui.Route.RouteAddViewModel
+import com.example.vapmzsem.ui.Route.RouteDetailViewModel
+import com.example.vapmzsem.ui.Route.RouteEditViewModel
 import com.example.vapmzsem.ui.Route.RouteScreen
 import com.example.vapmzsem.ui.Route.RouteViewModel
 
@@ -48,9 +50,23 @@ object AppViewModelProvider {
                 repository = myApplication().container.appRepository
             )
         }
-        //RouteAff
+        //RouteAdd
         initializer {
             RouteAddViewModel(
+                repository = myApplication().container.appRepository
+            )
+        }
+        //RoudeDetail
+        initializer {
+            RouteDetailViewModel(
+                savedStateHandle = this.createSavedStateHandle(),
+                repository = myApplication().container.appRepository
+            )
+        }
+        //RouteEdit
+        initializer {
+            RouteEditViewModel(
+                savedStateHandle = this.createSavedStateHandle(),
                 repository = myApplication().container.appRepository
             )
         }

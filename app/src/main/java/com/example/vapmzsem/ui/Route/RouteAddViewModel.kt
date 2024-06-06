@@ -41,5 +41,4 @@ class RouteAddViewModel(
 data class RouteAddUiState(
     val isEntryValid : Boolean = false,
     val details: RouteAsUi = RouteAsUi(),
-
 )

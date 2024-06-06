@@ -181,7 +181,7 @@ fun DeleteConfirmationDialog(
 
 @Preview
 @Composable
-fun FuelingAddScreenPreview(){
+fun FuelingDetailScreenPreview(){
     AppTheme {
         Surface {
             FuelingDetailBody(
