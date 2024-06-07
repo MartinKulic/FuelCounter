@@ -19,4 +19,5 @@ interface AppRepository {
     fun getNewestRoute() : Flow<Route?>
     suspend fun findCorespondingFueling(time : Date) : Int?
     suspend fun findCorespondingFueling(id : Int?) : Fueling?
+    fun calculateAverageFuelConsumption() : Flow<Float>
 }

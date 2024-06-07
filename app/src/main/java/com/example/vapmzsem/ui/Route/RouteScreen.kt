@@ -36,6 +36,7 @@ import com.example.vapmzsem.ui.Fueling.MyItemDetailDisplay
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import java.text.SimpleDateFormat
 import java.time.Duration
+import java.util.Currency
 import java.util.Date
 import java.util.Locale
 
@@ -111,7 +112,10 @@ fun RouteItem(item: RouteAsUi, modifier: Modifier) {
                     Text(text= "${item.start_point} -> ${item.finish_point}", fontSize = 15.sp, textAlign = TextAlign.Center)
                 }
             }
-            Row{
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, bottom = 2.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly){
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -129,7 +133,10 @@ fun RouteItem(item: RouteAsUi, modifier: Modifier) {
                         ).format(item.finish_time.timeInMillis - item.start_time.timeInMillis)
                     )
                 }
-                MyItemDetailDisplay("km", item.distance)
+                MyItemDetailDisplay("km", item.distance, 0.2f)
+                MyItemDetailDisplay(unit = "l", value = item.fuel_used, widthfill = 0.2f)
+                MyItemDetailDisplay(unit = Currency.getInstance(Locale.getDefault()).symbol, value = item.cost_of_route, widthfill = 0.25f)
+                MyItemDetailDisplay(unit = "l/100km", value = item.fuel_consumption, widthfill = 0.7f)
             }
 
         }

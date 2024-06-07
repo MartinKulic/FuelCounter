@@ -13,7 +13,6 @@ import com.example.vapmzsem.ui.Fueling.FuelingEditViewModel
 import com.example.vapmzsem.ui.Route.RouteAddViewModel
 import com.example.vapmzsem.ui.Route.RouteDetailViewModel
 import com.example.vapmzsem.ui.Route.RouteEditViewModel
-import com.example.vapmzsem.ui.Route.RouteScreen
 import com.example.vapmzsem.ui.Route.RouteViewModel
 
 object AppViewModelProvider {
@@ -47,7 +46,8 @@ object AppViewModelProvider {
         //RouteScreen
         initializer {
             RouteViewModel(
-                repository = myApplication().container.appRepository
+                repository = myApplication().container.appRepository,
+                averageFuelConsumption = myApplication().container.average_fuel_consumption
             )
         }
         //RouteAdd

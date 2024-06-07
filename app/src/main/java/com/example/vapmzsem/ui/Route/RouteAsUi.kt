@@ -16,8 +16,9 @@ data class RouteAsUi(
     val finish_point : String = "",
     val start_odometer : String = "",
     val finish_odometer : String = "",
-    var fuel_used : String = "",
-    var cost_of_route : String = ""
+    var fuel_used : String = "-",
+    var cost_of_route : String = "-",
+    var fuel_consumption : String = "-"
 ){
     init {
         if (start_time == finish_time) {

@@ -67,7 +67,7 @@ fun Fueling.toUi(distanceTraveled : String = "-") : FuelingAsUi{
             "###,###.00", DecimalFormatSymbols(
                 Locale.getDefault()
             )
-        ).format(average_fuel_consumption),
+        ).format(fuel_consumption),
         price_per_liter = DecimalFormat(
             "###,###.000", DecimalFormatSymbols(
                 Locale.getDefault()

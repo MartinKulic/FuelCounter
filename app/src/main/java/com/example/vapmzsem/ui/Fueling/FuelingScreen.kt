@@ -142,7 +142,7 @@ fun FuelingItem(
 
                 MyItemDetailDisplay(
                     unit = "l", value = item.quantity,
-                    widthfill = 0.3f
+                    widthfill = 0.35f
                 )
                 MyItemDetailDisplay(
                     unit = Currency.getInstance(Locale.getDefault()).symbol + "/l",
