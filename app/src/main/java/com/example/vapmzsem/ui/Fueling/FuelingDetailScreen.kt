@@ -137,6 +137,7 @@ fun FuelingDetailBody(
             )).format(cenaZaL),
             unit = "${Currency.getInstance(Locale.getDefault()).symbol}/l")
         DetailItem(title = "Odometer", value = details.odometter, unit = "km")
+        DetailItem(title = "Prejdená vzdialenosť", value = details.distance, unit = "km")
         DetailItem(title = "Plná nádrž", value = if (details.full_tank) "Áno" else "Nie")
         DetailItem(title = "Dátum a čas", value = SimpleDateFormat("EEE dd.MM.yyyy 'o' HH:mm:ss", Locale.getDefault()).format(details.time.timeInMillis))
         DetailItem(title = "Pumpa", value = details.fueling_Station)

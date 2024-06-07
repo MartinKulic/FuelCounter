@@ -68,7 +68,7 @@ fun FuelingScreen(
 
 @Composable
 fun FuelingList(
-    itemList: List<Fueling>,
+    itemList: List<FuelingAsUi>,
     onItemClicked : (Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -83,12 +83,12 @@ fun FuelingList(
     ) {
         items(
             items = itemList,
-            key = { fueling -> fueling.id_F }
+            key = { fueling -> fueling.id }
         ) { fueling ->
             FuelingItem(
                 item = fueling,
                 modifier = modifier
-                    .clickable { onItemClicked(fueling.id_F) }
+                    .clickable { onItemClicked(fueling.id) }
                 )
             }
         }
@@ -97,7 +97,7 @@ fun FuelingList(
 
 @Composable
 fun FuelingItem(
-    item : Fueling,
+    item : FuelingAsUi,
     modifier: Modifier
 ) {
 //    Card (
@@ -125,43 +125,28 @@ fun FuelingItem(
                     unit = SimpleDateFormat(
                         "dd.MM.yyyy",
                         Locale.getDefault()
-                    ).format(item.time?.time ?: 0),
+                    ).format(item.time.timeInMillis),
                     value = SimpleDateFormat("HH:mm", Locale.getDefault()).format(
-                        item.time?.time ?: 0
+                        item.time.timeInMillis
                     ),
-                    widthfill = 0.24f
+                    widthfill = 0.28f
                 )
                 MyItemDetailDisplay(
-                    unit = "km", value = DecimalFormat(
-                        "###,###,###", DecimalFormatSymbols(
-                            Locale.getDefault()
-                        )
-                    ).format(item.odometer),
+                    unit = "km", value = item.distance,
                     widthfill = 0.27f
                 )
                 MyItemDetailDisplay(
-                    unit = "l", value = DecimalFormat(
-                        "###,###.00", DecimalFormatSymbols(
-                            Locale.getDefault()
-                        )
-                    ).format(item.quantity),
+                    unit = "l", value = item.quantity,
                     widthfill = 0.3f
                 )
                 MyItemDetailDisplay(
                     unit = Currency.getInstance(Locale.getDefault()).symbol + "/l",
-                    value = DecimalFormat(
-                        "###,###.000", DecimalFormatSymbols(
-                            Locale.getDefault()
-                        )
-                    ).format(item.total_price / item.quantity),
+                    value = item.price_per_liter,
                     widthfill = 0.4f
                 )
                 MyItemDetailDisplay(
-                    unit = Currency.getInstance(Locale.getDefault()).symbol, value = DecimalFormat(
-                        "###,###.00", DecimalFormatSymbols(
-                            Locale.getDefault()
-                        )
-                    ).format(item.total_price),
+                    unit = Currency.getInstance(Locale.getDefault()).symbol,
+                    value = (item.total_price),
                     widthfill = 0.8f
                 )
             }
@@ -187,7 +172,7 @@ fun FuelingItemPreview(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        FuelingItem(item = Fueling(1, 31.24f, 51.85f, false, time = Date(), odometer = 999690),
+        FuelingItem(item = Fueling(1, 31.24f, 51.85f, false, time = Date(), odometer = 999690).toUi(),
             modifier = Modifier.padding(8.dp)
         )
     }
@@ -211,21 +196,21 @@ fun FuelingScreenPreviewEmplty(){
 fun FuelingScreenPreviewSomeItems(){
 
             val someItems = listOf(
-                Fueling(id_F = 0, quantity = 50.5f, total_price = 60.99f, full_tank = true, fuel_type = null, fueling_Station = null, time = Date(), odometer = null ),
-                Fueling(id_F = 1, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 2, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 3, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 4, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 5, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 6, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 7, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 8, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 11, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 12, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 13, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 14, quantity = 42.87f, total_price = 50.12f),
-                Fueling(id_F = 15, quantity = 60.0f, total_price = 100f),
-                Fueling(id_F = 16, quantity = 45.99f, total_price = 62.71f, fuel_type = "Natural95", full_tank = true, fueling_Station = "Rajec začiaton Shell", odometer = 92015)
+                Fueling(id_F = 0, quantity = 50.5f, total_price = 60.99f, full_tank = true, fuel_type = null, fueling_Station = null, time = Date(), odometer = null ).toUi(),
+                Fueling(id_F = 1, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 2, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 3, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 4, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 5, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 6, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 7, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 8, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 11, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 12, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 13, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 14, quantity = 42.87f, total_price = 50.12f).toUi(),
+                Fueling(id_F = 15, quantity = 60.0f, total_price = 100f).toUi(),
+                Fueling(id_F = 16, quantity = 45.99f, total_price = 62.71f, fuel_type = "Natural95", full_tank = true, fueling_Station = "Rajec začiaton Shell", odometer = 92015).toUi()
             )
 Surface(
 modifier = Modifier.fillMaxSize(),

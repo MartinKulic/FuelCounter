@@ -24,6 +24,7 @@ class RouteDetailViewModel(
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = RouteAsUi()
         )
+
     suspend fun delete(){
         repository.delete(uiState.value.toRoute())
     }

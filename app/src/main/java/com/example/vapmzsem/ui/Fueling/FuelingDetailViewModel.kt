@@ -7,8 +7,13 @@ import com.example.vapmzsem.data.AppRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class FuelingDetailViewModel(
     savedStateHandle: SavedStateHandle,
@@ -25,6 +30,22 @@ class FuelingDetailViewModel(
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = FuelingAsUi()
         )
+
+    init {
+            viewModelScope.launch {
+                val fueling = uiState.first()
+                val routesToFueling = repository.getAllRoutesToFueling(fueling.id).first()
+                var distanceTraveled = 0f
+                routesToFueling.forEach{ route -> distanceTraveled += route.distance }
+                fueling.distance = DecimalFormat(
+                    "###,###", DecimalFormatSymbols(
+                        Locale.getDefault()
+                    )
+                ).format(distanceTraveled)
+
+            }
+
+    }
 
     suspend fun delete(){
         repository.delete(uiState.value.toFueling())

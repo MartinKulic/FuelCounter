@@ -1,7 +1,10 @@
 package com.example.vapmzsem.ui.Fueling
 
 import com.example.vapmzsem.data.Fueling
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.Calendar
+import java.util.Locale
 
 data class FuelingAsUi(
     val id : Int = 0,
@@ -11,7 +14,9 @@ data class FuelingAsUi(
     val fuel_type : String = "",
     val fueling_Station : String = "",
     val time : Calendar = Calendar.getInstance(),
-    val odometter: String = ""
+    val odometter: String = "",
+    var distance: String = "", // Vzdialenst prejdena na tankovanie
+    val price_per_liter : String = ""
 ){
     fun toFueling() : Fueling {
         return Fueling(
@@ -22,8 +27,11 @@ data class FuelingAsUi(
             fuel_type = fuel_type,
             fueling_Station = fueling_Station,
             time = time.time,
-            odometer = odometter.toIntOrNull() ?: 0
+            odometer = odometter.toIntOrNull() ?: 0,
         )
+    }
+    fun updateDistance(updated:String){
+        this.distance = updated
     }
 }
 
@@ -32,12 +40,29 @@ fun Fueling.toUi() : FuelingAsUi{
     calTime.timeInMillis = time.time
     return FuelingAsUi(
         id = id_F,
-        quantity = quantity.toString(),
-        total_price = total_price.toString(),
+        quantity = DecimalFormat(
+            "###,###.00", DecimalFormatSymbols(
+                Locale.getDefault()
+            )
+        ).format(quantity),
+        total_price =  DecimalFormat(
+            "###,###.00", DecimalFormatSymbols(
+                Locale.getDefault()
+            )
+        ).format(total_price),
         full_tank = full_tank,
         fuel_type = fuel_type ?: "",
         fueling_Station = fueling_Station ?: "",
         time = calTime,
-        odometter = odometer.toString()
+        odometter = DecimalFormat(
+            "###,###,###", DecimalFormatSymbols(
+                Locale.getDefault()
+            )
+        ).format(odometer),
+        price_per_liter = DecimalFormat(
+            "###,###.000", DecimalFormatSymbols(
+                Locale.getDefault()
+            )
+        ).format(total_price / quantity)
     )
 }
