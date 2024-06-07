@@ -34,7 +34,7 @@ interface FuelingDao {
     suspend fun findCorespondingFueling(finishTime : Date) : Int?
 
     @Query("Select * from fuelings where id_F = :id")
-    fun findCorespondingFueling(id:Int) : Fueling?
+    suspend fun findCorespondingFueling(id:Int?) : Fueling?
 
 }
 

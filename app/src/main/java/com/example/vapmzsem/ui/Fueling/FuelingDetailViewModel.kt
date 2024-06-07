@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vapmzsem.data.AppRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -21,31 +22,17 @@ class FuelingDetailViewModel(
 ) : ViewModel(){
 
     private val fuelingId: Int = checkNotNull(savedStateHandle[FuelingDetailDestination.fuelingIdArg])
-    val uiState: StateFlow<FuelingAsUi> = repository.getFueling(fuelingId)
-        .filterNotNull()
-        .map {
-            it.toUi()
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = FuelingAsUi()
-        )
 
-    init {
-            viewModelScope.launch {
-                val fueling = uiState.first()
-                val routesToFueling = repository.getAllRoutesToFueling(fueling.id).first()
-                var distanceTraveled = 0f
-                routesToFueling.forEach{ route -> distanceTraveled += route.distance }
-                fueling.distance = DecimalFormat(
-                    "###,###", DecimalFormatSymbols(
-                        Locale.getDefault()
-                    )
-                ).format(distanceTraveled)
+    val uiState: StateFlow<FuelingAsUi> = repository.getFueling(fuelingId).filterNotNull().map {
+        it.toUi()
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+        initialValue = FuelingAsUi()
+    )
 
-            }
 
-    }
+
 
     suspend fun delete(){
         repository.delete(uiState.value.toFueling())

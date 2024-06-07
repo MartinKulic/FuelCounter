@@ -16,7 +16,9 @@ data class Fueling (
     val fuel_type : String? = null,
     val fueling_Station : String? = null,
     val time : Date = Date(),
-    val odometer: Int? = null
+    val odometer: Int? = null,
+    val distance_traveled : Float = 0f,
+    val average_fuel_consumption : Float = 4.7f
 )
 
 @Entity(tableName = "routes", foreignKeys = [ForeignKey(entity = Fueling::class, parentColumns = ["id_F"], childColumns = ["id_F"])])

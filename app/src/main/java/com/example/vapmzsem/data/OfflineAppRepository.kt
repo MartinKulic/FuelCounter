@@ -1,8 +1,6 @@
 package com.example.vapmzsem.data
 
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import java.util.Date
 
@@ -10,12 +8,19 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
     override suspend fun insert(item: Fueling) {
         fuelingDao.insert(item)
         fixIntegrity()
+
+        recountDistanceTraveledAndAverage()
     }
 
     override suspend fun insert(item: Route) {
         val corespondingFuelingId : Int? = findCorespondingFueling(item.finish_time)
         val fuelingToInser = item.copy(id_F = corespondingFuelingId)
         routeDao.insert(fuelingToInser)
+
+        if(corespondingFuelingId != null) {
+            val fueling = findCorespondingFueling(corespondingFuelingId)
+            recountDistanceTraveledAndAverage(fueling!!)
+        }
     }
     suspend fun insertRaw(item: Route){
         routeDao.insert(item)
@@ -24,12 +29,15 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
     override suspend fun update(item: Fueling) {
         fuelingDao.update(item)
         fixIntegrity()
+        recountDistanceTraveledAndAverage()
     }
 
     override suspend fun update(item: Route) {
         val corespondingFuelingId : Int? = findCorespondingFueling(item.finish_time)
-        val fuelingToInser = item.copy(id_F = corespondingFuelingId)
-        routeDao.update(fuelingToInser)
+        val routeToUpdate = item.copy(id_F = corespondingFuelingId)
+        routeDao.update(routeToUpdate)
+
+        recountDistanceTraveledAndAverage()
     }
     suspend fun updateRaw(item : Route){
         routeDao.update(item)
@@ -49,6 +57,10 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
                 val updatedroute = route.copy(id_F = newCorespondingFueling)
                 updateRaw(updatedroute)
             }
+            if(newCorespondingFueling != null) {
+                val fueling = getFueling(newCorespondingFueling).first()
+                recountDistanceTraveledAndAverage(fueling!!)
+            }
         }
 
     }
@@ -58,6 +70,11 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
 
     override suspend fun delete(item: Route) {
         routeDao.delete(item)
+
+        if (item.id_F != null) {
+            val fueling = getFueling(item.id_F).first()
+            recountDistanceTraveledAndAverage(fueling!!)
+        }
     }
 
     override fun getFueling(id: Int): Flow<Fueling?>{
@@ -92,7 +109,7 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
         return fuelingDao.findCorespondingFueling(time)
     }
 
-    override fun findCorespondingFueling(id: Int): Fueling? {
+    override suspend fun findCorespondingFueling(id: Int?): Fueling? {
         return fuelingDao.findCorespondingFueling(id)
     }
 
@@ -107,4 +124,29 @@ class OfflineAppRepository(private val fuelingDao : FuelingDao, private val rout
             }
         }
     }
+    suspend fun recountDistanceTraveledAndAverage(fueling: Fueling){
+
+            val routesCorespondingToFueling = routeDao.getAllRoutesToFueling(fueling.id_F).first()
+            var distanceTraveled = 0f
+            routesCorespondingToFueling.forEach { route -> distanceTraveled += route.distance }
+
+            val averageFC =
+                if (distanceTraveled == 0f) Float.POSITIVE_INFINITY else (fueling.quantity / distanceTraveled) * 100
+
+            fuelingDao.update(
+                fueling.copy(
+                    distance_traveled = distanceTraveled,
+                    average_fuel_consumption = averageFC
+                )
+            )
+
+    }
+    suspend fun recountDistanceTraveledAndAverage(){
+        val fuelings = getAllFuelings().first()
+
+        for (fueling in fuelings){
+            recountDistanceTraveledAndAverage(fueling)
+        }
+    }
+
 }

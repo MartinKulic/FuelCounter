@@ -15,8 +15,9 @@ data class FuelingAsUi(
     val fueling_Station : String = "",
     val time : Calendar = Calendar.getInstance(),
     val odometter: String = "",
-    var distance: String = "", // Vzdialenst prejdena na tankovanie
-    val price_per_liter : String = ""
+    val distance: String = "-", // Vzdialenst prejdena na tankovanie
+    val average_fuel_consumption : String = "-",
+    val price_per_liter : String = "-"
 ){
     fun toFueling() : Fueling {
         return Fueling(
@@ -30,12 +31,10 @@ data class FuelingAsUi(
             odometer = odometter.toIntOrNull() ?: 0,
         )
     }
-    fun updateDistance(updated:String){
-        this.distance = updated
-    }
+
 }
 
-fun Fueling.toUi() : FuelingAsUi{
+fun Fueling.toUi(distanceTraveled : String = "-") : FuelingAsUi{
     val calTime = Calendar.getInstance()
     calTime.timeInMillis = time.time
     return FuelingAsUi(
@@ -59,6 +58,16 @@ fun Fueling.toUi() : FuelingAsUi{
                 Locale.getDefault()
             )
         ).format(odometer),
+        distance = DecimalFormat(
+            "###,###.00", DecimalFormatSymbols(
+                Locale.getDefault()
+            )
+        ).format(distance_traveled),
+        average_fuel_consumption = DecimalFormat(
+            "###,###.00", DecimalFormatSymbols(
+                Locale.getDefault()
+            )
+        ).format(average_fuel_consumption),
         price_per_liter = DecimalFormat(
             "###,###.000", DecimalFormatSymbols(
                 Locale.getDefault()

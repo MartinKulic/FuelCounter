@@ -3,6 +3,8 @@ package com.example.vapmzsem.ui.Fueling
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -95,6 +97,7 @@ fun FuelingList(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FuelingItem(
     item : FuelingAsUi,
@@ -118,7 +121,7 @@ fun FuelingItem(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp, bottom = 10.dp),
+                    .padding(top = 10.dp, bottom = 2.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 MyItemDetailDisplay(
@@ -131,10 +134,12 @@ fun FuelingItem(
                     ),
                     widthfill = 0.28f
                 )
+
                 MyItemDetailDisplay(
                     unit = "km", value = item.distance,
                     widthfill = 0.27f
                 )
+
                 MyItemDetailDisplay(
                     unit = "l", value = item.quantity,
                     widthfill = 0.3f
@@ -149,6 +154,12 @@ fun FuelingItem(
                     value = (item.total_price),
                     widthfill = 0.8f
                 )
+            }
+            Row(modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                Spacer(modifier = Modifier.fillMaxWidth(0.28f))
+                Text(text = "${item.average_fuel_consumption} l/100km")
             }
         }
     }
