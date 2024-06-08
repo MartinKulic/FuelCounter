@@ -55,7 +55,7 @@ interface RouteDao{
     @Query("Select * from routes order by start_time DESC")
     fun getAllRoutes() : Flow<List<Route>>
 
-    @Query("Select * from routes Where id_F = :id")
+    @Query("Select * from routes Where id_F = :id order by start_time")
     fun getAllRoutesToFueling(id:Int) : Flow<List<Route>>
 
     @Query("Select * from routes where finish_time in (Select max(finish_time) from routes)")

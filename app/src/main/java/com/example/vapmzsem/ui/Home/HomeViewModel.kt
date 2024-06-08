@@ -25,7 +25,7 @@ class HomeViewModel(
         val firstFueling : Fueling = fuelings.first()
         HomeUiState( data = fuelings.map { fuel -> MyContainer(
             fueling = fuel.toUi(),
-            routes = repository.getAllRoutesToFueling(fuel.id_F).first().map {
+            routes = repository.getAllRoutesToFueling(fuel.id_F).first().sortedBy { it.start_time }.reversed().map {
                 var fuelConsumption = fuel?.fuel_consumption ?: averageFuelConsumption.first()
                 if (fuel == firstFueling){
                     fuelConsumption = averageFuelConsumption.first()
@@ -39,12 +39,7 @@ class HomeViewModel(
 
                  it.toUi().copy(fuel_used = stringedFuelUsed, fuel_consumption = stringedCounsumption, cost_of_route = stringedPrice)
 
-
             }
-//                .stateIn(
-//                scope = viewModelScope,
-//                started = SharingStarted.WhileSubscribed(5_000L),
-//                initialValue =  listOf(RouteAsUi())
             )
          }
         )
