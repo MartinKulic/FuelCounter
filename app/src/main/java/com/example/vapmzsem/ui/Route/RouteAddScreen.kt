@@ -86,7 +86,8 @@ fun RouteAddScreen(
                     bottom = innerPadding.calculateBottomPadding()
                 )
                 .verticalScroll(rememberScrollState())
-                .fillMaxWidth())
+                .fillMaxWidth(),
+            viewModel = viewModel)
     }
 }
 
@@ -95,6 +96,7 @@ fun RouteAddScreen(
 fun RouteAddBody(
     fuelingUiState: RouteAddUiState,
     onValueChange: (RouteAsUi)->Unit,
+    viewModel: RouteModifieInterface,
     modifier: Modifier) {
 
     val detail = fuelingUiState.details
@@ -107,7 +109,7 @@ fun RouteAddBody(
             )
 
             OutlinedTextField(value = detail.distance,
-                onValueChange = { onValueChange(detail.copy(distance = it)) },
+                onValueChange = { viewModel.updatedDistance(it) },
                 label = { Text(text = "Vzdialenost") },
                 leadingIcon = {Text(text = "km")},
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next)

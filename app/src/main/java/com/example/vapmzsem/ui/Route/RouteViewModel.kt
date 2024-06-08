@@ -38,21 +38,21 @@ class RouteViewModel (
 //    )
     init{
         viewModelScope.launch {
-            var fuelConsumption = averageFuelConsumption.first()
+            //var fuelConsumption = averageFuelConsumption.first()
             repository.getAllRoutes().combine(repository.getAllFuelings()) { routes, fuelings ->
                 routes.map {route ->
                     val corespondingFueling = fuelings.find { it.id_F == route.id_F }
 
-                    var fuelConsumption = corespondingFueling?.fuel_consumption ?: Float.POSITIVE_INFINITY
-                    if (corespondingFueling != repository.getNewestFueling().first()){
-                        fuelConsumption = corespondingFueling?.fuel_consumption ?: Float.POSITIVE_INFINITY
+                    var fuelConsumption = corespondingFueling?.fuel_consumption ?: averageFuelConsumption.first()
+                    if (corespondingFueling == repository.getNewestFueling().first()){
+                        fuelConsumption = averageFuelConsumption.first()
                     }
                         val fuelUsed = (route.distance * fuelConsumption)/100f
                         var price = if (corespondingFueling==null) null else fuelUsed * (corespondingFueling.total_price/corespondingFueling.quantity)
 
                         val stringedCounsumption = DecimalFormat("##.000").format(fuelConsumption)
-                        val stringedFuelUsed = DecimalFormat("###.000").format(fuelUsed)
-                        val stringedPrice = if (price==null) "-" else DecimalFormat("###.00").format(price)
+                        val stringedFuelUsed = DecimalFormat("#,###.00").format(fuelUsed)
+                        val stringedPrice = if (price==null) "-" else DecimalFormat("#,###.00").format(price)
 
                         route.toUi().copy(fuel_used = stringedFuelUsed, fuel_consumption = stringedCounsumption, cost_of_route = stringedPrice)
 

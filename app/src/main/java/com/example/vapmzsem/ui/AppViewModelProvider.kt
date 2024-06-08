@@ -60,7 +60,8 @@ object AppViewModelProvider {
         initializer {
             RouteDetailViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
-                repository = myApplication().container.appRepository
+                repository = myApplication().container.appRepository,
+                averageFuelConsumption = myApplication().container.average_fuel_consumption
             )
         }
         //RouteEdit

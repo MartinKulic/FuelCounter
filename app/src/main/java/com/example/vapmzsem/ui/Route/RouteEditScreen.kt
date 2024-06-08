@@ -68,7 +68,8 @@ fun RouteEditScreen(
                     bottom = innerPadding.calculateBottomPadding()
                 )
                 //.verticalScroll(rememberScrollState())
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            viewModel = viewModel
         )
 
     }

@@ -86,6 +86,7 @@ fun RouteDetailBody(
         DetailItem(title = "Počiatočný stav odometra", value = ((detail.finish_odometer.toFloatOrNull()?:0f) - (detail.distance.toFloatOrNull()?:0f)).toString())
         DetailItem(title = "Konečný stav odometra", value = detail.finish_odometer)
         DetailItem(title = "Predpokladané potrebované palivo", value = detail.fuel_used, unit = "l")
+        DetailItem(title = "Predpokladana spotreba paliva", value = detail.fuel_consumption, unit = "l/100km")
         DetailItem(title = "Predpokladaná cena cesty", value = detail.cost_of_route, unit = Currency.getInstance(Locale.getDefault()).symbol)
     }
 }

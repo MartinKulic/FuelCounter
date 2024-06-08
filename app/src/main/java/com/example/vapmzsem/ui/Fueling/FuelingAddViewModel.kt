@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vapmzsem.data.AppRepository
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class FuelingAddViewModel(
@@ -17,11 +18,16 @@ class FuelingAddViewModel(
 
     init {
         viewModelScope.launch {
-            repository.getNewestFueling().collect{
-                newestFuelnig -> newestFuelnig?.let {
-                    updateUiState(fuelingUiState.details.copy(odometter = it.odometer.toString()))
-                    fuelingUiState = fuelingUiState.copy(lastOdometer = it.odometer.toString())
-            }
+//            repository.getNewestFueling().collect{
+//                newestFuelnig -> newestFuelnig?.let {
+//                    updateUiState(fuelingUiState.details.copy(odometter = it.odometer.toString()))
+//                    fuelingUiState = fuelingUiState.copy(lastOdometer = it.odometer.toString())
+//            }
+//            }
+            val previousOdometer = repository.getNewestRoute().first()?.finish_odometer ?: repository.getNewestFueling().first()?.odometer
+            if (previousOdometer != null){
+                fuelingUiState = fuelingUiState.copy(lastOdometer = previousOdometer.toString())
+                updateUiState(fuelingUiState.details.copy(odometter = previousOdometer.toString()))
             }
         }
     }
@@ -48,5 +54,4 @@ data class FuelingUiState(
     val isEntryValid : Boolean = false,
     val details: FuelingAsUi = FuelingAsUi(),
     val lastOdometer : String? = null
-
 )

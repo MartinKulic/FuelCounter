@@ -43,7 +43,7 @@ data class RouteAsUi(
             finish_time = finish_time.time,
             start_point = start_point,
             finish_point = finish_point,
-            finish_odometer = finish_odometer.toIntOrNull() ?: 0
+            finish_odometer = (finish_odometer.toFloatOrNull() ?: 0f).toInt(),
         )
     }
 }
