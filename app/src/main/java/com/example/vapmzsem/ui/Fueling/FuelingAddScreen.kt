@@ -33,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -151,7 +152,11 @@ fun FuelingAddForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
         )
 
-        DateTimeRow(initCalendar = details.time, onValueChange = {onValueChange(details.copy(time = it))})
+        Row (horizontalArrangement = Arrangement.Center) {
+            DateTimeRow(
+                initCalendar = details.time,
+                onValueChange = { onValueChange(details.copy(time = it)) })
+        }
 
         Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = "Plná nádrž")
@@ -159,6 +164,7 @@ fun FuelingAddForm(
                 checked = details.full_tank,
                 onCheckedChange = { onValueChange(details.copy(full_tank = it)) }
             )
+            Text(text = "Bez ohladu na volbu sa predpokladá, že nádrž bola naplnená do plna", color = Color.Red, fontSize = 12.sp)
         }
 
         OutlinedTextField(
@@ -183,7 +189,7 @@ fun FuelingAddForm(
 fun DateTimeRow(
     initCalendar: Calendar,
     onValueChange: (Calendar) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ){
     var datePickerVisible by remember { mutableStateOf(false) }
     var timePickerVisible by remember { mutableStateOf(false) }

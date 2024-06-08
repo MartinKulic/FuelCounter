@@ -14,9 +14,8 @@ import kotlinx.coroutines.launch
 class RouteEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val repository: AppRepository
-) : ViewModel(), RouteModifieInterface{
-    var routeUiState by mutableStateOf(RouteAddUiState(details = RouteAsUi()))
-        private set
+) : RouteModifieInterface(){
+
     private val routeId: Int = checkNotNull(savedStateHandle[RouteEditDestination.routeIdArg])
 
     init {
@@ -29,24 +28,6 @@ class RouteEditViewModel(
         }
 
     }
-    fun updateUiState(routeAsUi : RouteAsUi){
-        routeUiState = RouteAddUiState(isEntryValid = validateInput(routeAsUi), details=routeAsUi)
-    }
-    private fun validateInput(details : RouteAsUi = routeUiState.details) : Boolean{
-        return with(details){
-            distance.isNotBlank() && finish_odometer.isNotBlank()
-        }
-    }
-
-    override fun updatedDistance(sdistance : String){
-        val diference = ((sdistance.toFloatOrNull() ?: 0f) - (routeUiState.details.distance.toFloatOrNull() ?: 0f))
-        updateUiState(routeUiState.details.copy(distance = sdistance, finish_odometer = ((routeUiState.details.finish_odometer.toFloatOrNull() ?: 0f) + diference).toString()))
-    }
-    override fun updatedOdometer(sodometer: String){
-        val diference = ((routeUiState.details.finish_odometer.toFloatOrNull() ?: 0f) - (sodometer.toFloatOrNull() ?: 0f))
-        updateUiState(routeUiState.details.copy(distance = ((routeUiState.details.distance.toFloatOrNull() ?: 0f) + diference).toString(), finish_odometer = sodometer))
-    }
-
     suspend fun updateRoute(){
         if(validateInput()){
             repository.update(routeUiState.details.toRoute())

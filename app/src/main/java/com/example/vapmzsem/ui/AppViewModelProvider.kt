@@ -10,6 +10,8 @@ import com.example.vapmzsem.ui.Fueling.FuelinViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingAddViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingDetailViewModel
 import com.example.vapmzsem.ui.Fueling.FuelingEditViewModel
+import com.example.vapmzsem.ui.Home.HomeScreen
+import com.example.vapmzsem.ui.Home.HomeViewModel
 import com.example.vapmzsem.ui.Route.RouteAddViewModel
 import com.example.vapmzsem.ui.Route.RouteDetailViewModel
 import com.example.vapmzsem.ui.Route.RouteEditViewModel
@@ -69,6 +71,14 @@ object AppViewModelProvider {
             RouteEditViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
                 repository = myApplication().container.appRepository
+            )
+        }
+
+        //Homescreen
+        initializer {
+            HomeViewModel(
+                repository = myApplication().container.appRepository,
+                averageFuelConsumption = myApplication().container.average_fuel_consumption
             )
         }
     }

@@ -1,6 +1,5 @@
 package com.example.vapmzsem.ui.Route
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -12,17 +11,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,10 +32,6 @@ import com.example.vapmzsem.MyTopAppBar
 import com.example.vapmzsem.R
 import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.Fueling.DateTimeRow
-import com.example.vapmzsem.ui.Fueling.FuelingAddBody
-import com.example.vapmzsem.ui.Fueling.FuelingAddScreenDestination
-import com.example.vapmzsem.ui.Fueling.FuelingAddViewModel
-import com.example.vapmzsem.ui.Fueling.FuelingAsUi
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
@@ -102,6 +98,12 @@ fun RouteAddBody(
     val detail = fuelingUiState.details
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        var startTimeNotModified by remember {
+            mutableStateOf(true)
+        }
+        var finishTimeNotModifie by remember {
+            mutableStateOf(true)
+        }
             OutlinedTextField(value = detail.title,
                 onValueChange = { onValueChange(detail.copy(title = it)) },
                 label = { Text(text = "Názov cesty") },
@@ -122,18 +124,35 @@ fun RouteAddBody(
                 leadingIcon = {Text(text = "km")},
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
             )
-        FlowRow (modifier = Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceEvenly){
-             Column{
+        FlowRow (modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceEvenly){
+            Column{
                 Text(text = "Čas začiatku")
                 DateTimeRow(
                     initCalendar = detail.start_time,
-                    onValueChange = { onValueChange(detail.copy(start_time = it)) },
-                    modifier = Modifier)}
+                    onValueChange = { calendar ->
+                        var newdetail = detail.copy(start_time =  calendar)
+                        startTimeNotModified = false
+                        if (finishTimeNotModifie) {
+                            newdetail = newdetail.copy(finish_time = calendar)
+                        }
+                        onValueChange(newdetail)
+                                    },
+                    modifier = Modifier,
+                )}
             Column() {
                 Text(text = "Čas konca")
                 DateTimeRow(
                     initCalendar = detail.finish_time,
-                    onValueChange = { onValueChange(detail.copy(finish_time = it)) },
+                    onValueChange = { calendar ->
+                        var newdetail = detail.copy(finish_time =  calendar)
+                        finishTimeNotModifie = false
+                        if(startTimeNotModified){
+                            newdetail = newdetail.copy(start_time = calendar)
+                        }
+                        onValueChange(newdetail)
+                                    },
                     modifier = Modifier
                 )
             }

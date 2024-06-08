@@ -28,7 +28,7 @@ data class FuelingAsUi(
             fuel_type = fuel_type,
             fueling_Station = fueling_Station,
             time = time.time,
-            odometer = odometter.toIntOrNull() ?: 0,
+            odometer =  odometter.toFloatOrNull()?.toInt() ?: 0,
         )
     }
 
