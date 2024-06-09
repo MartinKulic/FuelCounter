@@ -10,4 +10,5 @@
     <string name="nov_cesta">Nová Cesta</string>
     <string name="route_detail_screen_title">Cesta</string>
     <string name="route_edit_screen_title">Úprava Cesty</string>
+    <string name="home_screen_title">Prehľad</string>
 </resources>

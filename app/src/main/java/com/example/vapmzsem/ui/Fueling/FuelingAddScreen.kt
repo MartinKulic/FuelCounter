@@ -126,7 +126,7 @@ fun FuelingAddForm(
     previousOdometerValue : String? = null
 ){
     /*TODO Aby nebolo mozne pridat zaporne quantity a cenu*/
-    Column {
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         OutlinedTextField(
             value = details.quantity,
             label = { Text("Natankované množstvo") },
@@ -158,9 +158,9 @@ fun FuelingAddForm(
                 onValueChange = { onValueChange(details.copy(time = it)) })
         }
 
-        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+        Row (modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
             Text(text = "Plná nádrž")
-            Switch (modifier = Modifier.padding(start = 20.dp),
+            Switch (modifier = Modifier.padding(start = 15.dp, end = 20.dp),
                 checked = details.full_tank,
                 onCheckedChange = { onValueChange(details.copy(full_tank = it)) }
             )

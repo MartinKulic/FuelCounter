@@ -61,7 +61,7 @@ fun RouteScreen(
                 Text(text = "Nová Cesta")
             }
         }
-        RouteList(onItemClicked = onItemClicked, routeList = uiState.routesList, modifier = Modifier.padding(top = 10.dp))
+        RouteList(onItemClicked = onItemClicked, routeList = uiState.routesList, modifier = Modifier.padding(top = 10.dp, start = 20.dp, end =20.dp))
     }
 }
 

@@ -21,13 +21,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vapmzsem.R
 import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.Fueling.FuelingItem
 import com.example.vapmzsem.ui.Fueling.MyItemDetailDisplay
 import com.example.vapmzsem.ui.Route.RouteAsUi
+import com.example.vapmzsem.ui.navigation.NavigationDestination
 import java.text.SimpleDateFormat
 import java.util.Currency
 import java.util.Locale
+
+object HomeScreenDestination : NavigationDestination{
+    override val route: String = "home"
+
+    override val titleRes: Int = R.string.home_screen_title
+
+}
 
 @Composable
 fun HomeScreen(

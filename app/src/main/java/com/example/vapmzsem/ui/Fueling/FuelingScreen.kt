@@ -52,13 +52,13 @@ fun FuelingScreen(
     modifier: Modifier = Modifier
 ){
     val uiState by viewModel.fuelingScreenUiState.collectAsState()
-    Column (horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(Modifier.fillMaxWidth()) {
-            Button(onClick = onNewFuelingClick, modifier = modifier.fillMaxWidth()) {
+    Column (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = onNewFuelingClick, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Nové Tankovanie")
             }
         }
-        Column (modifier = modifier.padding(start = 20.dp, end = 20.dp)){
+        Column (modifier = Modifier.padding(start = 20.dp, end = 20.dp)){
             FuelingList(
                 itemList = uiState.itemList,
                 onItemClicked = onItemClicked
