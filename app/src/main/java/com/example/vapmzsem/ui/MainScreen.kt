@@ -3,25 +3,26 @@ package com.example.vapmzsem.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.dp
 import com.example.vapmzsem.R
 import com.example.vapmzsem.TabTopAppBar
+import com.example.vapmzsem.ui.Fueling.FuelingDetailDestination
 import com.example.vapmzsem.ui.Fueling.FuelingScreen
 import com.example.vapmzsem.ui.Home.HomeScreen
+import com.example.vapmzsem.ui.Home.HomeScreenDestination
 import com.example.vapmzsem.ui.Route.RouteScreen
+import com.example.vapmzsem.ui.Route.RouteScreenDestination
+import com.example.vapmzsem.ui.Statistics.StatisticScreen
+import com.example.vapmzsem.ui.Statistics.StatisticsScreenDestination
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
@@ -42,11 +43,11 @@ fun MainScreen(
 //    var tabIndex by rememberSaveable {
 //        mutableStateOf(1)
 //    }
-
-    var pagerState = rememberPagerState (pageCount = {3}, initialPage = 1)
+    val titles = listOf(FuelingDetailDestination.titleRes, HomeScreenDestination.titleRes, RouteScreenDestination.titleRes, StatisticsScreenDestination.titleRes)
+    var pagerState = rememberPagerState (pageCount = {4}, initialPage = 1)
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(topBar = { TabTopAppBar(pagerState.currentPage, onClick = {coroutineScope.launch { pagerState.scrollToPage(it) }}) }) {
+    Scaffold(topBar = { TabTopAppBar(pagerState.currentPage, onClick = {coroutineScope.launch { pagerState.scrollToPage(it) }}, titles = titles) }) {
             innerPadding ->
         HorizontalPager(state = pagerState) {
                 page -> when(page) {
@@ -56,7 +57,8 @@ fun MainScreen(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                     top = innerPadding.calculateTopPadding()
-                ).fillMaxSize(),
+                )
+                .fillMaxSize(),
             onItemClicked = fuelingItemClicked,
             onNewFuelingClick = fuelingNewClicked)
 
@@ -66,7 +68,10 @@ fun MainScreen(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                     top = innerPadding.calculateTopPadding()
-                ).fillMaxSize()
+                )
+                .fillMaxSize(),
+            onFuelingClicked = fuelingItemClicked,
+            onRouteClicked = routeItemClicked
         )
         2->RouteScreen(
             modifier = Modifier
@@ -74,10 +79,17 @@ fun MainScreen(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                     top = innerPadding.calculateTopPadding()
-                ).fillMaxSize(),
+                )
+                .fillMaxSize(),
             onNewRouteClick = routeNewClicked,
             onItemClicked = routeItemClicked
         )
+        3-> StatisticScreen(modifier = Modifier
+            .padding(
+                start = 10.dp,
+                end = 10.dp,
+                top = innerPadding.calculateTopPadding()
+            ).fillMaxSize())
 
     }
     }

@@ -16,6 +16,8 @@ import com.example.vapmzsem.ui.Route.RouteAddViewModel
 import com.example.vapmzsem.ui.Route.RouteDetailViewModel
 import com.example.vapmzsem.ui.Route.RouteEditViewModel
 import com.example.vapmzsem.ui.Route.RouteViewModel
+import com.example.vapmzsem.ui.Statistics.StatisticScreen
+import com.example.vapmzsem.ui.Statistics.StatisticViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -80,6 +82,13 @@ object AppViewModelProvider {
                 repository = myApplication().container.appRepository,
                 averageFuelConsumption = myApplication().container.average_fuel_consumption
             )
+        }
+        //StatisticScreen
+        initializer {
+            StatisticViewModel(
+                repository = myApplication().container.appRepository,
+                averageFuelConsumption = myApplication().container.average_fuel_consumption
+                )
         }
     }
 }
