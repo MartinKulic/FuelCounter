@@ -77,16 +77,27 @@ fun RouteDetailBody(
     modifier: Modifier = Modifier
 ){
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        DetailItem(title = "Názov", value = detail.title)
-        DetailItem(title = "Prejdená vzdialenosť", value = detail.distance, unit = "km")
-        DetailItem(title = "Čas začiatku", value =  SimpleDateFormat("EEE dd.MM.yyyy 'o' HH:mm:ss", Locale.getDefault()).format(detail.start_time.timeInMillis))
-        DetailItem(title = "Začiatok", value = detail.finish_point)
-        DetailItem(title = "Čas príjazdu", value =  SimpleDateFormat("EEE dd.MM.yyyy 'o' HH:mm:ss", Locale.getDefault()).format(detail.finish_time.timeInMillis))
-        DetailItem(title = "Cieľ", value = detail.finish_point)
-        DetailItem(title = "Počiatočný stav odometra", value = ((detail.finish_odometer.toFloatOrNull()?:0f) - (detail.distance.toFloatOrNull()?:0f)).toString())
-        DetailItem(title = "Konečný stav odometra", value = detail.finish_odometer)
-        DetailItem(title = "Predpokladané potrebované palivo", value = detail.fuel_used, unit = "l")
-        DetailItem(title = "Predpokladana spotreba paliva", value = detail.fuel_consumption, unit = "l/100km")
-        DetailItem(title = "Predpokladaná cena cesty", value = detail.cost_of_route, unit = Currency.getInstance(Locale.getDefault()).symbol)
+        DetailItem(title = stringResource(R.string.desc_route_name), value = detail.title)
+        DetailItem(title = stringResource(R.string.desc_route_distance_traveled), value = detail.distance, unit = stringResource(
+            id = R.string.unit_distance_short
+        ))
+        DetailItem(title = stringResource(id = R.string.timepicker_route_start_time), value =  SimpleDateFormat(
+            stringResource(id = R.string.value_format_full_date_at_time), Locale.getDefault()).format(detail.start_time.timeInMillis))
+        DetailItem(title = stringResource(R.string.desc_route_start_point), value = detail.finish_point)
+        DetailItem(title = stringResource(R.string.desc_route_time_of_arival), value =  SimpleDateFormat(
+            stringResource(id = R.string.value_format_full_date_at_time), Locale.getDefault()).format(detail.finish_time.timeInMillis))
+        DetailItem(title = stringResource(R.string.desc_rooute_finish_point), value = detail.finish_point)
+        DetailItem(title = stringResource(R.string.desc_route_start_odometer), value = ((detail.finish_odometer.toFloatOrNull()?:0f) - (detail.distance.toFloatOrNull()?:0f)).toString(), unit = stringResource(
+            id = R.string.unit_distance_short
+        ))
+        DetailItem(title = stringResource(R.string.desc_route_finish_odometer), value = detail.finish_odometer, unit = stringResource(
+            id = R.string.unit_distance_short))
+        DetailItem(title = stringResource(R.string.desc_route_assumed_fuel_used), value = detail.fuel_used, unit = stringResource(
+            id = R.string.unit_volume_short
+        ))
+        DetailItem(title = stringResource(R.string.desc_route_assumed_fuel_consumption), value = detail.fuel_consumption, unit = stringResource(
+            id = R.string.unit_fuel_consumption
+        ))
+        DetailItem(title = stringResource(R.string.desc_route_assumed_price_of_route), value = detail.cost_of_route, unit = Currency.getInstance(Locale.getDefault()).symbol)
     }
 }

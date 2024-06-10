@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,8 +32,6 @@ import com.example.vapmzsem.ui.AppViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vapmzsem.R
 import com.example.vapmzsem.ui.navigation.NavigationDestination
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Currency
 import java.util.Date
@@ -55,7 +53,7 @@ fun FuelingScreen(
     Column (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Button(onClick = onNewFuelingClick, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Nové Tankovanie")
+                Text(text = stringResource(R.string.button_new_fueling))
             }
         }
         Column (modifier = Modifier.padding(start = 20.dp, end = 20.dp)){
@@ -76,7 +74,7 @@ fun FuelingList(
 ) {
     if (itemList.isEmpty()) {
         Spacer(modifier = Modifier.height(50.dp))
-        Text(text = "Zatial žiadne tankovania :(", style = MaterialTheme.typography.titleLarge)
+        Text(text = stringResource(R.string.title_no_fuelings), style = MaterialTheme.typography.titleLarge)
     }
     else{
         LazyColumn(
@@ -124,7 +122,7 @@ fun FuelingItem(
                     .padding(top = 10.dp, bottom = 2.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MyItemDetailDisplay(
+                ItemDetailInColumnDisplay(
                     unit = SimpleDateFormat(
                         "dd.MM.yyyy",
                         Locale.getDefault()
@@ -135,21 +133,22 @@ fun FuelingItem(
                     widthfill = 0.28f
                 )
 
-                MyItemDetailDisplay(
-                    unit = "km", value = item.distance,
+                ItemDetailInColumnDisplay(
+                    unit = stringResource(R.string.unit_distance_short), value = item.distance,
                     widthfill = 0.27f
                 )
 
-                MyItemDetailDisplay(
-                    unit = "l", value = item.quantity,
+                ItemDetailInColumnDisplay(
+                    unit = stringResource(id = R.string.unit_volume_short), value = item.quantity,
                     widthfill = 0.35f
                 )
-                MyItemDetailDisplay(
-                    unit = Currency.getInstance(Locale.getDefault()).symbol + "/l",
+                ItemDetailInColumnDisplay(
+                    unit = stringResource(id = R.string.unit_price_per_volume_unit,Currency.getInstance(Locale.getDefault()).symbol,
+                        stringResource(id = R.string.unit_volume_short)),// Currency.getInstance(Locale.getDefault()).symbol + "/l",
                     value = item.price_per_liter,
                     widthfill = 0.4f
                 )
-                MyItemDetailDisplay(
+                ItemDetailInColumnDisplay(
                     unit = Currency.getInstance(Locale.getDefault()).symbol,
                     value = (item.total_price),
                     widthfill = 0.8f
@@ -159,13 +158,17 @@ fun FuelingItem(
                 .padding(bottom = 8.dp)
                 .fillMaxWidth(), horizontalArrangement = Arrangement.Center){
                 Spacer(modifier = Modifier.fillMaxWidth(0.28f))
-                Text(text = "${item.average_fuel_consumption} l/100km")
+                Text(text = "${item.average_fuel_consumption} "+ stringResource(id = R.string.unit_fuel_consumption))
             }
         }
     }
 }
+
+/**
+ * Zobrazi jednotku pod nou hodnotu
+ */
 @Composable
-fun MyItemDetailDisplay(
+fun ItemDetailInColumnDisplay(
     unit: String,
     value: String,
     widthfill : Float = 1f
@@ -230,7 +233,7 @@ color = MaterialTheme.colorScheme.background
     Column (horizontalAlignment = Alignment.CenterHorizontally) {
         Row(Modifier.fillMaxWidth()) {
             Button(onClick = {  }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Nové Tankovanie")
+                Text(text = stringResource(id = R.string.button_new_fueling))
             }
         }
         Column(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) {

@@ -10,7 +10,7 @@ data class FuelingAsUi(
     val id : Int = 0,
     val quantity : String = "",
     val total_price : String = "",
-    val full_tank : Boolean = false,
+    val full_tank : Boolean = true,
     val fuel_type : String = "",
     val fueling_Station : String = "",
     val time : Calendar = Calendar.getInstance(),

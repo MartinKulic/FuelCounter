@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,11 +31,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vapmzsem.R
 import com.example.vapmzsem.data.Route
 import com.example.vapmzsem.ui.AppViewModelProvider
-import com.example.vapmzsem.ui.Fueling.FuelingItem
-import com.example.vapmzsem.ui.Fueling.MyItemDetailDisplay
+import com.example.vapmzsem.ui.Fueling.ItemDetailInColumnDisplay
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import java.text.SimpleDateFormat
-import java.time.Duration
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
@@ -58,10 +56,10 @@ fun RouteScreen(
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(){
             Button(onClick = onNewRouteClick, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Nová Cesta")
+                Text(text = stringResource(R.string.button_new_route))
             }
         }
-        RouteList(onItemClicked = onItemClicked, routeList = uiState.routesList, modifier = Modifier.padding(top = 10.dp, start = 20.dp, end =20.dp))
+        RouteList(onItemClicked = onItemClicked, routeList = uiState.routesList, modifier = Modifier.padding(top = 10.dp, start = 12.dp, end =12.dp))
     }
 }
 
@@ -73,7 +71,7 @@ fun RouteList(
 ){
     if(routeList.isEmpty()){
         Spacer(modifier = Modifier.height(50.dp))
-        Text(text = "Zatial žiadne Cesty :(", style = MaterialTheme.typography.titleLarge)
+        Text(text = stringResource(R.string.title_no_routes), style = MaterialTheme.typography.titleLarge)
     }
     else{
         LazyColumn(
@@ -99,7 +97,7 @@ fun RouteList(
 
 @Composable
 fun RouteItem(item: RouteAsUi, modifier: Modifier) {
-    Row(modifier = modifier.fillMaxWidth()){
+    Row(modifier = Modifier.fillMaxWidth()){
         ElevatedCard (
             modifier = modifier,
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
@@ -133,10 +131,10 @@ fun RouteItem(item: RouteAsUi, modifier: Modifier) {
                         ).format(item.finish_time.timeInMillis - item.start_time.timeInMillis)
                     )
                 }
-                MyItemDetailDisplay("km", item.distance, 0.2f)
-                MyItemDetailDisplay(unit = "l", value = item.fuel_used, widthfill = 0.2f)
-                MyItemDetailDisplay(unit = Currency.getInstance(Locale.getDefault()).symbol, value = item.cost_of_route, widthfill = 0.25f)
-                MyItemDetailDisplay(unit = "l/100km", value = item.fuel_consumption, widthfill = 0.7f)
+                ItemDetailInColumnDisplay(stringResource(id = R.string.unit_distance_short), item.distance, 0.2f)
+                ItemDetailInColumnDisplay(unit = stringResource(id = R.string.unit_volume_short), value = item.fuel_used, widthfill = 0.25f)
+                ItemDetailInColumnDisplay(unit = Currency.getInstance(Locale.getDefault()).symbol, value = item.cost_of_route, widthfill = 0.36f)
+                ItemDetailInColumnDisplay(unit = stringResource(id = R.string.unit_fuel_consumption), value = item.fuel_consumption, widthfill = 0.8f)
             }
 
         }

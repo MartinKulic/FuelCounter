@@ -64,7 +64,7 @@ fun RouteAddScreen(
                         onNavigateBack()
                     } },
                     Modifier.fillMaxWidth(), enabled = viewModel.routeUiState.isEntryValid) {
-                    Text(text = "Potvrď")
+                    Text(text = stringResource(id = R.string.button_confirm))
                 }
             }
         }
@@ -106,29 +106,29 @@ fun RouteAddBody(
         }
             OutlinedTextField(value = detail.title,
                 onValueChange = { onValueChange(detail.copy(title = it)) },
-                label = { Text(text = "Názov cesty") },
+                label = { Text(text = stringResource(R.string.in_field_route_name_of_route)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
             )
 
             OutlinedTextField(value = detail.distance,
                 onValueChange = { viewModel.updatedDistance(it) },
-                label = { Text(text = "Vzdialenost") },
-                leadingIcon = {Text(text = "km")},
+                label = { Text(text = stringResource(R.string.in_field_route_distance)) },
+                leadingIcon = {Text(text = stringResource(id = R.string.unit_distance_short))},
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next)
             )
 
 
             OutlinedTextField(value = detail.finish_odometer,
                 onValueChange = { onValueChange(detail.copy(finish_odometer = it)) },
-                label = { Text(text = "Konečný stav odometru") },
-                leadingIcon = {Text(text = "km")},
+                label = { Text(text = stringResource(R.string.in_field_route_end_state_odometer)) },
+                leadingIcon = {Text(text = stringResource(id = R.string.unit_distance_short))},
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
             )
         FlowRow (modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceEvenly){
             Column{
-                Text(text = "Čas začiatku")
+                Text(text = stringResource(R.string.timepicker_route_start_time))
                 DateTimeRow(
                     initCalendar = detail.start_time,
                     onValueChange = { calendar ->
@@ -142,7 +142,7 @@ fun RouteAddBody(
                     modifier = Modifier,
                 )}
             Column() {
-                Text(text = "Čas konca")
+                Text(text = stringResource(R.string.timepicker_route_finish_time))
                 DateTimeRow(
                     initCalendar = detail.finish_time,
                     onValueChange = { calendar ->
@@ -160,12 +160,12 @@ fun RouteAddBody(
 
         OutlinedTextField(value = detail.start_point,
             onValueChange = { onValueChange(detail.copy(start_point = it)) },
-            label = { Text(text = "Z") },
+            label = { Text(text = stringResource(R.string.in_field_route_from)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
         )
         OutlinedTextField(value = detail.finish_point,
             onValueChange = { onValueChange(detail.copy(finish_point = it)) },
-            label = { Text(text = "Do") },
+            label = { Text(text = stringResource(R.string.in_field_route_to)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done)
         )
 

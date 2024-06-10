@@ -84,7 +84,7 @@ fun FuelingAddScreen(
                         onNavigateBack()
                     } },
                     Modifier.fillMaxWidth(), enabled = viewModel.fuelingUiState.isEntryValid) {
-                    Text(text = "Potvrď")
+                    Text(text = stringResource(R.string.button_confirm))
                 }
             }
         }
@@ -129,26 +129,30 @@ fun FuelingAddForm(
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         OutlinedTextField(
             value = details.quantity,
-            label = { Text("Natankované množstvo") },
+            label = { Text(stringResource(R.string.in_field_fueling_quantity)) },
             onValueChange = { onValueChange(details.copy(quantity = it)) },
-            leadingIcon = { Text("liters") },
+            leadingIcon = { Text(stringResource(R.string.unit_volume_short)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next)
         )
         OutlinedTextField(
             value = details.total_price,
-            label = {Text("Cena")},
+            label = {Text(stringResource(R.string.in_field_fueling_price))},
             onValueChange = {onValueChange(details.copy(total_price = it))},
             leadingIcon = {Text(Currency.getInstance(Locale.getDefault()).symbol)},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next)
         )
         OutlinedTextField(
             value = details.odometter,
-            label = {Text("Odometer")},
+            label = {Text(stringResource(R.string.in_field_fueling_odometer))},
             supportingText = {if (previousOdometerValue != null) {
-                Text(text = "Posledná hodnota odometra: $previousOdometerValue km")
+                Text(text = stringResource(
+                    R.string.in_field_fueling_odometer_support_text,
+                    previousOdometerValue,
+                    stringResource(R.string.unit_distance_short)
+                ))
             } },
             onValueChange = {onValueChange(details.copy(odometter = it))},
-            leadingIcon = {Text("km")},
+            leadingIcon = {Text(stringResource(id = R.string.unit_distance_short))},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
         )
 
@@ -158,24 +162,28 @@ fun FuelingAddForm(
                 onValueChange = { onValueChange(details.copy(time = it)) })
         }
 
-        Row (modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-            Text(text = "Plná nádrž")
+        Row (modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Text(text = stringResource(R.string.in_switch_fueling_full_tank))
             Switch (modifier = Modifier.padding(start = 15.dp, end = 20.dp),
                 checked = details.full_tank,
                 onCheckedChange = { onValueChange(details.copy(full_tank = it)) }
             )
-            Text(text = "Bez ohladu na volbu sa predpokladá, že nádrž bola naplnená do plna", color = Color.Red, fontSize = 12.sp)
+            if (!details.full_tank) {
+                Text(text = stringResource(R.string.in_switch_fueling_warming_text), color = Color.Red, fontSize = 12.sp)
+            }
         }
 
         OutlinedTextField(
             value = details.fuel_type,
-            label = {Text("Druh paliva")},
+            label = {Text(stringResource(R.string.in_field_fueling_type_of_fuel))},
             onValueChange = {onValueChange(details.copy(fuel_type = it))},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
         )
         OutlinedTextField(
             value = details.fueling_Station,
-            label = {Text("Čerpacia stanica")},
+            label = {Text(stringResource(R.string.in_field_fueling_fueling_station))},
             onValueChange = {onValueChange(details.copy(fueling_Station = it))},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Go)
         )
@@ -184,6 +192,9 @@ fun FuelingAddForm(
 
 }
 
+/**
+ * Komponent pre vyber datumu a casu
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimeRow(
@@ -203,7 +214,7 @@ fun DateTimeRow(
         ) {
             OutlinedCard (
             ){
-                Text(text = "Dátum", fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
+                Text(text = stringResource(R.string.time_picker_date), fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
                 Text(text =  SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(initCalendar.timeInMillis ?: Date()), //details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: ""
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
@@ -215,7 +226,7 @@ fun DateTimeRow(
         ) {
             OutlinedCard (
             ){
-                Text(text = "Čas", fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
+                Text(text = stringResource(R.string.time_picker_time), fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
                 Text(text = initCalendar.time.let { SimpleDateFormat("HH:mm", Locale.getDefault()).format(it.time ?: Date()) },
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
@@ -228,7 +239,7 @@ fun DateTimeRow(
             DatePickerDialog(
                 dismissButton = {
                     Button(onClick = { datePickerVisible = false }) {
-                        Text(text = "Zruš")
+                        Text(text = stringResource(R.string.button_cancel))
                     }
                 },
                 confirmButton = {
@@ -242,7 +253,7 @@ fun DateTimeRow(
                         onValueChange(calendar)
                         datePickerVisible = false
                     }) {
-                        Text(text = "OK")
+                        Text(text = stringResource(id = R.string.button_confirm))
                     }
                 },
                 onDismissRequest = { datePickerVisible = false }

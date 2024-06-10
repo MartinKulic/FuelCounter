@@ -50,8 +50,8 @@ class RouteViewModel (
                         val fuelUsed = (route.distance * fuelConsumption)/100f
                         var price = if (corespondingFueling==null) null else fuelUsed * (corespondingFueling.total_price/corespondingFueling.quantity)
 
-                        val stringedCounsumption = DecimalFormat("##.000").format(fuelConsumption)
-                        val stringedFuelUsed = DecimalFormat("#,###.00").format(fuelUsed)
+                        val stringedCounsumption = DecimalFormat("##.00").format(fuelConsumption)
+                        val stringedFuelUsed = DecimalFormat("#,###.0").format(fuelUsed)
                         val stringedPrice = if (price==null) "-" else DecimalFormat("#,###.00").format(price)
 
                         route.toUi().copy(fuel_used = stringedFuelUsed, fuel_consumption = stringedCounsumption, cost_of_route = stringedPrice)

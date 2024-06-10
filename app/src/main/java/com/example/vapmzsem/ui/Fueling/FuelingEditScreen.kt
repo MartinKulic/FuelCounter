@@ -56,7 +56,7 @@ fun FuelingEditScreen(
                         onModificationConfirm()
                     } },
                     Modifier.fillMaxWidth(), enabled = viewModel.fuelingUiState.isEntryValid) {
-                    Text(text = "Potvrď")
+                    Text(text = stringResource(id = R.string.button_confirm))
                 }
             }
         }

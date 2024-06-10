@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vapmzsem.R
 import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.Fueling.FuelingItem
-import com.example.vapmzsem.ui.Fueling.MyItemDetailDisplay
+import com.example.vapmzsem.ui.Fueling.ItemDetailInColumnDisplay
 import com.example.vapmzsem.ui.Route.RouteAsUi
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import java.text.SimpleDateFormat
@@ -52,7 +53,9 @@ fun HomeScreen(
     LazyColumn(modifier = modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(15.dp)) {
         for (myContainer in uiState.data){
             item {
-                Column (modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer).border(2.dp, color = Color(0xFF3E7B9F))){
+                Column (modifier = Modifier
+                    .background(color = MaterialTheme.colorScheme.primaryContainer)
+                    .border(2.dp, color = Color(0xFF3E7B9F))){
                     myContainer.routes.forEach { routeUi ->
                         RouteItem(
                             item = routeUi,
@@ -127,9 +130,9 @@ fun RouteItem(item : RouteAsUi, modifier: Modifier = Modifier){
                         )
                     }
 
-                    MyItemDetailDisplay(unit = "km", value = item.distance, widthfill = 0.28f)
-                    MyItemDetailDisplay(unit = "l", value = item.fuel_used, widthfill = 0.35f)
-                    MyItemDetailDisplay(
+                    ItemDetailInColumnDisplay(unit =  stringResource(id = R.string.unit_distance_short), value = item.distance, widthfill = 0.28f)
+                    ItemDetailInColumnDisplay(unit =  stringResource(id = R.string.unit_volume_short), value = item.fuel_used, widthfill = 0.35f)
+                    ItemDetailInColumnDisplay(
                         unit = Currency.getInstance(Locale.getDefault()).symbol,
                         value = item.cost_of_route,
                         widthfill = 0.6f

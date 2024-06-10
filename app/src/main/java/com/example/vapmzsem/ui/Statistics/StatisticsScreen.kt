@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,15 +28,26 @@ fun StatisticScreen(
 ){
     val uiState : StatisticUiState = viewModel.uiState.collectAsState().value
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(15.dp)) {
-        DetailItem(title = "Priemerná spotreba", value = uiState.averageConsummption, unit = "l/100km")
-        DetailItem(title = "Priemerná cena paliva", value = uiState.avarageFuelPrice, unit = "${
-            Currency.getInstance(
-                Locale.getDefault()).symbol}/l")
-        DetailItem(title = "Priemerné množstvo kúpeného paliva", value = uiState.averageQuantity, unit = "l")
-        DetailItem(title = "Priemerne zaplatené za tankovanie", value = uiState.averagePayedForFuel, unit = Currency.getInstance(Locale.getDefault()).symbol)
-        DetailItem(title = "Priemerné vzdialonosť medzi tankovaniami", value = uiState.averageDistanceBetweenFuelings, unit = "km")
-        DetailItem(title = "Celkovo prejdene", value = uiState.totalDistanceTraveled, unit = "km")
-        DetailItem(title = "Celkovo paliva kúpeného", value = uiState.totalFuelBuyed, unit = "l")
+        DetailItem(title = stringResource(id = R.string.desc_average_consumption) , value = uiState.averageConsummption, unit = stringResource(
+            R.string.unit_fuel_consumption
+        ))
+        DetailItem(title = stringResource(R.string.desc_average_cost_of_fuel), value = uiState.avarageFuelPrice, unit = stringResource(
+            R.string.unit_price_per_volume_unit,
+            Currency.getInstance(Locale.getDefault()).symbol,
+            stringResource(id = R.string.unit_volume_short)))
+        DetailItem(title = stringResource(R.string.desc_average_quantity_of_buyed_fuel), value = uiState.averageQuantity, unit = stringResource(
+            id = R.string.unit_volume_short
+        ))
+        DetailItem(title = stringResource(R.string.desc_average_payed_for_fuel), value = uiState.averagePayedForFuel, unit = Currency.getInstance(Locale.getDefault()).symbol)
+        DetailItem(title = stringResource(R.string.desc_average_distance_traveled_on_one_fueling), value = uiState.averageDistanceBetweenFuelings, unit = stringResource(
+            id = R.string.unit_distance_short
+        ))
+        DetailItem(title = stringResource(R.string.desc_total_distance_traveled), value = uiState.totalDistanceTraveled, unit = stringResource(
+            id = R.string.unit_distance_short
+        ))
+        DetailItem(title = stringResource(R.string.desc_total_fuel_buyed), value = uiState.totalFuelBuyed, unit = stringResource(
+            id = R.string.unit_volume_short
+        ))
 
     }
 }

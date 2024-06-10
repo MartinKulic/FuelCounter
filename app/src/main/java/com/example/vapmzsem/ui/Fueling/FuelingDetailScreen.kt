@@ -106,10 +106,10 @@ fun FuelingDetailBottomBar(
             .fillMaxWidth()
             .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom){
         OutlinedButton(onClick = { deleteConfirmation = true }, modifier = Modifier.fillMaxWidth(0.5f)) {
-            Text(text= "Vymazať")
+            Text(text= stringResource(R.string.button_delete))
         }
         Button(onClick = onEditClick, modifier = Modifier.fillMaxWidth() ) {
-            Text(text = "Upraviť")
+            Text(text = stringResource(R.string.button_edit))
         }
     }
 
@@ -131,20 +131,36 @@ fun FuelingDetailBody(
 ){
     Column (modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         val cenaZaL = ((details.total_price.toFloatOrNull()?:1f)/(details.quantity.toFloatOrNull()?:1f))
-        DetailItem(title = "Cena", value = details.total_price, unit = Currency.getInstance(Locale.getDefault()).symbol)
-        DetailItem(title = "Množstvo", value = details.quantity)
-        DetailItem(title = "Cena za liter", value = DecimalFormat(
+        DetailItem(title = stringResource(id = R.string.in_field_fueling_price), value = details.total_price, unit = Currency.getInstance(Locale.getDefault()).symbol)
+        DetailItem(title = stringResource(id = R.string.in_field_fueling_quantity) , value = details.quantity)
+        DetailItem(title = stringResource(R.string.desc_price_per_volume_unit), value = DecimalFormat(
             "##.0000", DecimalFormatSymbols(
                 Locale.getDefault()
             )).format(cenaZaL),
-            unit = "${Currency.getInstance(Locale.getDefault()).symbol}/l")
-        DetailItem(title = "Odometer", value = details.odometter, unit = "km")
-        DetailItem(title = "Prejdená vzdialenosť", value = details.distance, unit = "km")
-        DetailItem(title = "Priemerna spotreba", value = details.average_fuel_consumption, unit = "l/100km")
-        DetailItem(title = "Plná nádrž", value = if (details.full_tank) "Áno" else "Nie")
-        DetailItem(title = "Dátum a čas", value = SimpleDateFormat("EEE dd.MM.yyyy 'o' HH:mm:ss", Locale.getDefault()).format(details.time.timeInMillis))
-        DetailItem(title = "Pumpa", value = details.fueling_Station)
-        DetailItem(title = "Typ paliva", value = details.fuel_type)
+            unit = stringResource(
+                R.string.unit_price_per_volume_unit,
+                Currency.getInstance(Locale.getDefault()).symbol,
+                stringResource(id = R.string.unit_volume_short)
+            )
+        )
+        DetailItem(title = stringResource(id = R.string.in_field_fueling_odometer) , value = details.odometter, unit = stringResource(
+            id = R.string.unit_distance_short
+        ))
+        DetailItem(title = stringResource(R.string.desc_distance_traveled), value = details.distance, unit = stringResource(
+            id = R.string.unit_distance_short
+        ))
+        DetailItem(title = stringResource(R.string.desc_average_consumption), value = details.average_fuel_consumption, unit = stringResource(
+            R.string.unit_fuel_consumption
+        )
+        )
+        DetailItem(title = stringResource(id = R.string.in_switch_fueling_full_tank), value = if (details.full_tank) stringResource(
+            R.string.yes
+        ) else stringResource(R.string.no)
+        )
+        DetailItem(title = stringResource(R.string.desc_date_and_time), value = SimpleDateFormat(
+            stringResource(R.string.value_format_full_date_at_time), Locale.getDefault()).format(details.time.timeInMillis))
+        DetailItem(title = stringResource(id = R.string.in_field_fueling_fueling_station) , value = details.fueling_Station)
+        DetailItem(title = stringResource(id = R.string.in_field_fueling_type_of_fuel) , value = details.fuel_type)
 
     }
 }
@@ -169,15 +185,15 @@ fun DeleteConfirmationDialog(
 ){
     AlertDialog(
         onDismissRequest = {},
-        title = { Text(text = "Naozaj chceš vymazať?") },
+        title = { Text(text = stringResource(R.string.text_delete_dialog)) },
         modifier = Modifier,
         dismissButton = {
             TextButton(onClick =  onReject ) {
-                Text(text = "Nie")
+                Text(text = stringResource(id = R.string.no))
             }
         },
         confirmButton = { TextButton(onClick =  onConfirm ) {
-            Text(text = "Áno")
+            Text(text = stringResource(id = R.string.yes))
         }}
 
     )
