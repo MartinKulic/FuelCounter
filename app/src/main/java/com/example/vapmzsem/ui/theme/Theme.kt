@@ -1,5 +1,4 @@
 package com.example.vapmzsem.ui.theme
-
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -17,6 +16,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.example.vapmzsem.ui.theme.AppTypography
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -46,7 +46,7 @@ private val lightScheme = lightColorScheme(
     scrim = scrimLight,
     inverseSurface = inverseSurfaceLight,
     inverseOnSurface = inverseOnSurfaceLight,
-    inversePrimary = inversePrimaryLight
+    inversePrimary = inversePrimaryLight,
 
 )
 
@@ -78,7 +78,8 @@ private val darkScheme = darkColorScheme(
     scrim = scrimDark,
     inverseSurface = inverseSurfaceDark,
     inverseOnSurface = inverseOnSurfaceDark,
-    inversePrimary = inversePrimaryDark
+    inversePrimary = inversePrimaryDark,
+
 )
 
 private val mediumContrastLightColorScheme = lightColorScheme(
@@ -109,7 +110,8 @@ private val mediumContrastLightColorScheme = lightColorScheme(
     scrim = scrimLightMediumContrast,
     inverseSurface = inverseSurfaceLightMediumContrast,
     inverseOnSurface = inverseOnSurfaceLightMediumContrast,
-    inversePrimary = inversePrimaryLightMediumContrast
+    inversePrimary = inversePrimaryLightMediumContrast,
+
 )
 
 private val highContrastLightColorScheme = lightColorScheme(
@@ -140,7 +142,8 @@ private val highContrastLightColorScheme = lightColorScheme(
     scrim = scrimLightHighContrast,
     inverseSurface = inverseSurfaceLightHighContrast,
     inverseOnSurface = inverseOnSurfaceLightHighContrast,
-    inversePrimary = inversePrimaryLightHighContrast
+    inversePrimary = inversePrimaryLightHighContrast,
+
 )
 
 private val mediumContrastDarkColorScheme = darkColorScheme(
@@ -171,7 +174,8 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
     scrim = scrimDarkMediumContrast,
     inverseSurface = inverseSurfaceDarkMediumContrast,
     inverseOnSurface = inverseOnSurfaceDarkMediumContrast,
-    inversePrimary = inversePrimaryDarkMediumContrast
+    inversePrimary = inversePrimaryDarkMediumContrast,
+
 )
 
 private val highContrastDarkColorScheme = darkColorScheme(
@@ -202,7 +206,8 @@ private val highContrastDarkColorScheme = darkColorScheme(
     scrim = scrimDarkHighContrast,
     inverseSurface = inverseSurfaceDarkHighContrast,
     inverseOnSurface = inverseOnSurfaceDarkHighContrast,
-    inversePrimary = inversePrimaryDarkHighContrast
+    inversePrimary = inversePrimaryDarkHighContrast,
+
 )
 
 @Immutable
@@ -224,27 +229,28 @@ fun AppTheme(
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> darkScheme
-        else -> lightScheme
+  val colorScheme = when {
+      dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+          val context = LocalContext.current
+          if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+      }
+      
+      darkTheme -> darkScheme
+      else -> lightScheme
+  }
+  val view = LocalView.current
+  if (!view.isInEditMode) {
+    SideEffect {
+      val window = (view.context as Activity).window
+      window.statusBarColor = colorScheme.primary.toArgb()
+      WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
     }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
-    }
+  }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
+  MaterialTheme(
+    colorScheme = colorScheme,
+    typography = AppTypography,
+    content = content
+  )
 }
+

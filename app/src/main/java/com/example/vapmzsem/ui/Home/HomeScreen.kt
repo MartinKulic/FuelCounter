@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,7 +56,7 @@ fun HomeScreen(
             item {
                 Column (modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.primaryContainer)
-                    .border(2.dp, color = Color(0xFF3E7B9F))){
+                    .border(2.dp, color = Color(0x4F3E7B9F))){
                     myContainer.routes.forEach { routeUi ->
                         RouteItem(
                             item = routeUi,

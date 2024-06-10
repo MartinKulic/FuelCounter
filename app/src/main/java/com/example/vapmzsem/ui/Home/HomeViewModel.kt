@@ -34,7 +34,7 @@ class HomeViewModel(
                 var price = if (fuel==null) null else fuelUsed * (fuel.total_price/fuel.quantity)
 
                 val stringedCounsumption = DecimalFormat("##.000").format(fuelConsumption)
-                val stringedFuelUsed = DecimalFormat("#,###.00").format(fuelUsed)
+                val stringedFuelUsed = DecimalFormat("#,###.0").format(fuelUsed)
                 val stringedPrice = if (price==null) "-" else DecimalFormat("#,###.00").format(price)
 
                  it.toUi().copy(fuel_used = stringedFuelUsed, fuel_consumption = stringedCounsumption, cost_of_route = stringedPrice)
