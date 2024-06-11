@@ -34,6 +34,7 @@ import com.example.vapmzsem.ui.AppViewModelProvider
 import com.example.vapmzsem.ui.Fueling.DateTimeRow
 import com.example.vapmzsem.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 object RouteAddScreenDestination : NavigationDestination{
     override val route: String = "route_add"
@@ -132,12 +133,16 @@ fun RouteAddBody(
                 DateTimeRow(
                     initCalendar = detail.start_time,
                     onValueChange = { calendar ->
-                        var newdetail = detail.copy(start_time =  calendar)
+                        val newStartCalendar : Calendar = Calendar.getInstance()
+                        newStartCalendar.timeInMillis = calendar.timeInMillis
+                        val newFinistCalendar = Calendar.getInstance()
+                        newFinistCalendar.timeInMillis = detail.finish_time.timeInMillis
                         startTimeNotModified = false
                         if (finishTimeNotModifie) {
-                            newdetail = newdetail.copy(finish_time = calendar)
+                            newFinistCalendar.timeInMillis = calendar.timeInMillis
                         }
-                        onValueChange(newdetail)
+                        val newDetail = detail.copy(start_time = newStartCalendar, finish_time = newFinistCalendar)
+                        onValueChange(newDetail)
                                     },
                     modifier = Modifier,
                 )}

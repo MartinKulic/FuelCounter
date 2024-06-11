@@ -125,10 +125,7 @@ fun RouteItem(item: RouteAsUi, modifier: Modifier) {
                         ).format(item.start_time.timeInMillis)
                     )
                     Text(
-                        text = SimpleDateFormat(
-                            "hh:mm:ss",
-                            Locale.getDefault()
-                        ).format(item.finish_time.timeInMillis - item.start_time.timeInMillis)
+                        text = item.duration
                     )
                 }
                 ItemDetailInColumnDisplay(stringResource(id = R.string.unit_distance_short), item.distance, 0.2f)

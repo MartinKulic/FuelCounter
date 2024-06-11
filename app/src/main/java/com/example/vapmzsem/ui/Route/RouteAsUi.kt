@@ -2,8 +2,10 @@ package com.example.vapmzsem.ui.Route
 
 import com.example.vapmzsem.data.Route
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.Calendar
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 data class RouteAsUi(
     val id : Int = 0,
@@ -18,12 +20,20 @@ data class RouteAsUi(
     val finish_odometer : String = "",
     var fuel_used : String = "-",
     var cost_of_route : String = "-",
-    var fuel_consumption : String = "-"
+    var fuel_consumption : String = "-",
+    var duration: String = "00:00:00"
 ){
     init {
         if (start_time == finish_time) {
             finish_time.add(Calendar.HOUR_OF_DAY, 1)
         }
+        val durationInMillis = finish_time.timeInMillis - start_time.timeInMillis
+
+        val hours = TimeUnit.MILLISECONDS.toHours(durationInMillis)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(durationInMillis) % 60
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(durationInMillis) % 60
+
+        duration = String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     fun toRoute() : Route {

@@ -205,6 +205,7 @@ fun DateTimeRow(
     var datePickerVisible by remember { mutableStateOf(false) }
     var timePickerVisible by remember { mutableStateOf(false) }
     val calendar = remember { Calendar.getInstance() }
+    calendar.timeInMillis = initCalendar.timeInMillis
 
     Row (modifier = modifier){
         Column (modifier = Modifier
@@ -215,7 +216,7 @@ fun DateTimeRow(
             OutlinedCard (
             ){
                 Text(text = stringResource(R.string.time_picker_date), fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-                Text(text =  SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(initCalendar.timeInMillis ?: Date()), //details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: ""
+                Text(text =  SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(calendar.timeInMillis ?: Date()), //details.time.let { SimpleDateFormat("dd.MM.yyy").format(it) ?: ""
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
         }
@@ -227,14 +228,14 @@ fun DateTimeRow(
             OutlinedCard (
             ){
                 Text(text = stringResource(R.string.time_picker_time), fontSize = 15.sp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-                Text(text = initCalendar.time.let { SimpleDateFormat("HH:mm", Locale.getDefault()).format(it.time ?: Date()) },
+                Text(text = calendar.time.let { SimpleDateFormat("HH:mm", Locale.getDefault()).format(it.time ?: Date()) },
                     modifier=Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp,))
             }
         }
     }
 
     if(datePickerVisible){
-        val dateState  = rememberDatePickerState( initialSelectedDateMillis = initCalendar.timeInMillis )
+        val dateState  = rememberDatePickerState( initialSelectedDateMillis = calendar.timeInMillis )
         Column {
             DatePickerDialog(
                 dismissButton = {
