@@ -20,7 +20,7 @@ class RouteAddViewModel(
         viewModelScope.launch {
             val previousOdometer = repository.getNewestRoute().first()?.finish_odometer ?: repository.getNewestFueling().first()?.odometer
 
-            updateUiState(routeUiState.details.copy(finish_odometer = previousOdometer.toString()))
+            updateUiState(routeUiState.details.copy(finish_odometer = previousOdometer?.toString()?:""))
         }
     }
 

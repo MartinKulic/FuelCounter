@@ -65,4 +65,5 @@
     <string name="desc_average_distance_traveled_on_one_fueling">Priemerná vzdialenosť medzi tankovaniami</string>
     <string name="desc_total_distance_traveled">Celkovo prejdené</string>
     <string name="desc_total_fuel_buyed">Celkom paliva kúpeného</string>
+    <string name="title_no_data">Zatiaľ žiadne údaje</string>
 </resources>

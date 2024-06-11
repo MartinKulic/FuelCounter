@@ -22,7 +22,7 @@ class HomeViewModel(
     averageFuelConsumption : Flow<Float>
 ) : ViewModel(){
     val homeUiState : StateFlow<HomeUiState> = repository.getAllFuelings().map { fuelings ->
-        val firstFueling : Fueling = fuelings.first()
+        val firstFueling : Fueling? = fuelings.firstOrNull()
         HomeUiState( data = fuelings.map { fuel -> MyContainer(
             fueling = fuel.toUi(),
             routes = repository.getAllRoutesToFueling(fuel.id_F).first().sortedBy { it.start_time }.reversed().map {

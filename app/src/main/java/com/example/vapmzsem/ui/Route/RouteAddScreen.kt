@@ -115,7 +115,7 @@ fun RouteAddBody(
                 onValueChange = { viewModel.updatedDistance(it) },
                 label = { Text(text = stringResource(R.string.in_field_route_distance)) },
                 leadingIcon = {Text(text = stringResource(id = R.string.unit_distance_short))},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done)
             )
 
 

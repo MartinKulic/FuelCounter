@@ -6,7 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CardDefaults
@@ -51,24 +54,42 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ){
     val uiState by viewModel.homeUiState.collectAsState()
-    LazyColumn(modifier = modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(15.dp)) {
-        for (myContainer in uiState.data){
-            item {
-                Column (modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.primaryContainer)
-                    .border(2.dp, color = Color(0x4F3E7B9F))){
-                    myContainer.routes.forEach { routeUi ->
-                        RouteItem(
-                            item = routeUi,
-                            Modifier
-                                .padding(top = 8.dp, start = 30.dp, end = 30.dp)
-                                .clickable { onRouteClicked(routeUi.id) })
-                    }
-                    FuelingItem(
-                        item = myContainer.fueling,
+    if (uiState.data.isEmpty()){
+        Column (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+
+            Text(
+                text = stringResource(R.string.title_no_data),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(500.dp))
+        }
+    }
+
+    else{
+        LazyColumn(
+            modifier = modifier.padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            for (myContainer in uiState.data) {
+                item {
+                    Column(
                         modifier = Modifier
-                            .padding(top = 5.dp)
-                            .clickable { onFuelingClicked(myContainer.fueling.id) })
+                            .background(color = MaterialTheme.colorScheme.primaryContainer)
+                            .border(2.dp, color = Color(0x4F3E7B9F))
+                    ) {
+                        myContainer.routes.forEach { routeUi ->
+                            RouteItem(
+                                item = routeUi,
+                                Modifier
+                                    .padding(top = 8.dp, start = 30.dp, end = 30.dp)
+                                    .clickable { onRouteClicked(routeUi.id) })
+                        }
+                        FuelingItem(
+                            item = myContainer.fueling,
+                            modifier = Modifier
+                                .padding(top = 5.dp)
+                                .clickable { onFuelingClicked(myContainer.fueling.id) })
+                    }
                 }
             }
         }

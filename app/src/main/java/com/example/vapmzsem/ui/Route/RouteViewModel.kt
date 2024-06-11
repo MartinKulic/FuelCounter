@@ -29,13 +29,7 @@ class RouteViewModel (
         RouteScreenUiState()
     )
     val routeScreenUiState : StateFlow<RouteScreenUiState> = _routeScreenUiState.asStateFlow()
-//    val routeScreenUiState : StateFlow<RouteScreenUiState> = repository.getAllRoutes().map { routeList ->
-//        RouteScreenUiState(routeList.map { it.toUi() })
-//    }.stateIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-//        initialValue = RouteScreenUiState()
-//    )
+
     init{
         viewModelScope.launch {
             //var fuelConsumption = averageFuelConsumption.first()
